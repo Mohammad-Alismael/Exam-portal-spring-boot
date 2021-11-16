@@ -1,4 +1,4 @@
-package CS434.ExamPortal;
+package CS434.ExamPortal.Classes;
 
 import java.security.SecureRandom;
 import java.util.Random;

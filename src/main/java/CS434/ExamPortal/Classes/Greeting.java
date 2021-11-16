@@ -1,4 +1,4 @@
-package CS434.ExamPortal;
+package CS434.ExamPortal.Classes;
 
 public class Greeting {
     private final String id;
