@@ -3,10 +3,20 @@ package CS434.ExamPortal.Classes;
 import java.security.SecureRandom;
 import java.util.Random;
 
-public abstract class RandomUuidStringCreator {
+public class RandomUuidStringCreator {
 
     private static final int RANDOM_VERSION = 4;
+    private static RandomUuidStringCreator singleton = null;
 
+    private RandomUuidStringCreator(){
+
+    }
+    public static RandomUuidStringCreator getInstance() {
+
+        if (singleton == null)
+            singleton = new RandomUuidStringCreator();
+        return singleton;
+    }
     /**
      * Returns a random-based UUID as String.
      *
@@ -15,18 +25,8 @@ public abstract class RandomUuidStringCreator {
      * @return a random-based UUID string
      */
     public static String getRandomUuid() {
-        return getRandomUuid(SecureRandomLazyHolder.SECURE_RANDOM);
-    }
-
-    /**
-     * Returns a random-based UUID as String WITH dashes.
-     *
-     * It uses a thread local {@link SecureRandom}.
-     *
-     * @return a random-based UUID string
-     */
-    public static String getRandomUuidWithDashes() {
-        return format(getRandomUuid());
+        Random SECURE_RANDOM = new SecureRandom();
+        return getRandomUuid(SECURE_RANDOM);
     }
 
     /**
@@ -36,7 +36,7 @@ public abstract class RandomUuidStringCreator {
      *
      * @return a random-based UUID string
      */
-    public static String getRandomUuid(Random random) {
+    private static String getRandomUuid(Random random) {
 
         long msb = 0;
         long lsb = 0;
@@ -63,17 +63,6 @@ public abstract class RandomUuidStringCreator {
 
         // Return the UUID
         return msbHex + lsbHex;
-    }
-
-    /**
-     * Returns a random-based UUID as String WITH dashes.
-     *
-     * It uses a thread local {@link SecureRandom}.
-     *
-     * @return a random-based UUID string
-     */
-    public static String getRandomUuidWithDashes(Random random) {
-        return format(getRandomUuid(random));
     }
 
     private static long toNumber(final byte[] bytes, final int start, final int length) {
@@ -111,29 +100,4 @@ public abstract class RandomUuidStringCreator {
         }
         return output;
     }
-
-    private static String format(String string) {
-        char[] input = string.toCharArray();
-        char[] output = new char[36];
-
-        System.arraycopy(input, 0, output, 0, 8);
-        System.arraycopy(input, 8, output, 9, 4);
-        System.arraycopy(input, 12, output, 14, 4);
-        System.arraycopy(input, 16, output, 19, 4);
-        System.arraycopy(input, 20, output, 24, 12);
-
-        output[8] = '-';
-        output[13] = '-';
-        output[18] = '-';
-        output[23] = '-';
-
-        return new String(output);
-    }
-
-    // Holds lazy secure random
-    private static class SecureRandomLazyHolder {
-        static final Random SECURE_RANDOM = new SecureRandom();
-    }
-
-
 }

@@ -14,15 +14,15 @@ public class GreetingController {
     private static final String template = "Hello, %s. it works!";
     private final AtomicLong counter = new AtomicLong();
 
-    @GetMapping("/greeting")
-    public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return new Greeting(RandomUuidStringCreator.getRandomUuid(), String.format(template, name));
-    }
+//    @GetMapping("/greeting")
+//    public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
+////        return new Greeting(RandomUuidStringCreator.getRandomUuid(), String.format(template, name));
+//    }
     @GetMapping("/listGreeting")
     public ArrayList<Greeting> greeting() {
         ArrayList<Greeting> g = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            g.add(new Greeting(RandomUuidStringCreator.getRandomUuid(), "hello"+ (i+1)));
+            g.add(new Greeting(RandomUuidStringCreator.getInstance().getRandomUuid(), "hello"+ (i+1)));
         }
         return g;
     }
