@@ -32,19 +32,19 @@ public class UserController {
 
     }
 
-    @GetMapping(path="/list")
+    @GetMapping(path="/list-users")
     public @ResponseBody Iterable<Users>test() {
         return userRepository.findAll();
     }
 
-    @PostMapping(path="/add") // Map ONLY POST Requests
+    @PostMapping(path="/add-user") // Map ONLY POST Requests
     public @ResponseBody
     Users addNewUser (@RequestBody Users userInfo) {
         Users users = userRepository.findByUsername(userInfo.getUsername());
 
         if (users == null){
             userRepository.save(userInfo);
-            return users;
+            return userInfo;
         }else {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "username already taken");
         }
