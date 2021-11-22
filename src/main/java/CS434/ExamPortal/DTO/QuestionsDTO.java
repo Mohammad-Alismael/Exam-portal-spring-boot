@@ -1,34 +1,13 @@
-package CS434.ExamPortal.DAO;
+package CS434.ExamPortal.DTO;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "Questions")
-public class Questions {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "question_id")
+public class QuestionsDTO {
     private Integer questionId;
-
-    @Column(name = "question_type")
     private Integer questionType;
-
-    @Column(name = "creator_exam_id")
     private Integer creatorExamId;
-
-    @Column(name = "question_text")
     private String questionText;
-
-    @Column(name = "points")
     private Integer points;
-
-    @Column(name = "exam_id")
     private String examId;
-
-    @Column(name = "isActive")
     private Byte isActive;
-
-    @Column(name = "who_can_see")
     private Integer whoCanSee;
 
     public Integer getQuestionId() {
