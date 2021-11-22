@@ -17,18 +17,15 @@ public class UserController {
     @PostMapping(path="/authenticate") // Map ONLY POST Requests
     public @ResponseBody
     List<Users> authenticateUser (@RequestBody Users userInfo) {
-        List<Users> a = userRepository.
+        List<Users> user = userRepository.
                 findUsersByUsernameAndAndPassword(
                         userInfo.getUsername(),
                         userInfo.getPassword());
-        if (a.size() == 0){
+        if (user.size() == 0){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "incorrect username or password");
         }
 
-        return userRepository.
-                findUsersByUsernameAndAndPassword(
-                        userInfo.getUsername(),
-                        userInfo.getPassword());
+        return user;
 
     }
 
