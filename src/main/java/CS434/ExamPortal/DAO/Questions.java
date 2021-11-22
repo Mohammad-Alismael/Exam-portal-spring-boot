@@ -31,7 +31,7 @@ public class Questions {
     @Column(name = "who_can_see")
     private Integer whoCanSee;
 
-    public Integer getQuestionId() {
+    public String getQuestionId() {
         return this.questionId;
     }
 
@@ -83,7 +83,7 @@ public class Questions {
         return this.isActive;
     }
 
-    public void setIsActive(Byte isActive) {
+    public void setIsActive(boolean isActive) {
         this.isActive = isActive;
     }
 
