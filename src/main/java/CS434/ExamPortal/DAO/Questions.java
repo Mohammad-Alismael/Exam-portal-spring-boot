@@ -25,13 +25,13 @@ public class Questions {
     @Column(name = "exam_id")
     private String examId;
 
-    @Column(name = "isActive")
-    private Byte isActive;
+    @Column(name = "is_active")
+    private Integer isActive;
 
     @Column(name = "who_can_see")
     private Integer whoCanSee;
 
-    public String getQuestionId() {
+    public Integer getQuestionId() {
         return this.questionId;
     }
 
@@ -79,11 +79,11 @@ public class Questions {
         this.examId = examId;
     }
 
-    public Byte getIsActive() {
+    public Integer getIsActive() {
         return this.isActive;
     }
 
-    public void setIsActive(boolean isActive) {
+    public void setIsActive(Integer isActive) {
         this.isActive = isActive;
     }
 
@@ -93,5 +93,19 @@ public class Questions {
 
     public void setWhoCanSee(Integer whoCanSee) {
         this.whoCanSee = whoCanSee;
+    }
+
+    @Override
+    public String toString() {
+        return "Questions{" +
+                "questionId=" + questionId +
+                ", questionType=" + questionType +
+                ", creatorExamId=" + creatorExamId +
+                ", questionText='" + questionText + '\'' +
+                ", points=" + points +
+                ", examId='" + examId + '\'' +
+                ", isActive=" + isActive +
+                ", whoCanSee=" + whoCanSee +
+                '}';
     }
 }
