@@ -1,9 +1,11 @@
 package CS434.ExamPortal.Controller;
 
 import CS434.ExamPortal.DAO.Exams;
+import CS434.ExamPortal.DAO.QuestionOptions;
 import CS434.ExamPortal.DAO.Questions;
 import CS434.ExamPortal.DAO.Users;
 import CS434.ExamPortal.Repositories.ExamRepository;
+import CS434.ExamPortal.Repositories.OptionRepository;
 import CS434.ExamPortal.Repositories.QuestionRepository;
 import CS434.ExamPortal.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class QuestionsController {
     private UserRepository userRepository;
     @Autowired
     private ExamRepository examRepository;
+    @Autowired
+    private OptionRepository optionRepository;
 
     @PostMapping(path="/add-question") // Map ONLY POST Requests
     public @ResponseBody
@@ -139,7 +143,7 @@ public class QuestionsController {
         return questionRepository.findAllQuestions();
     }
 
-    @GetMapping (path="/list-questions-by-accessibility")
+    @PostMapping (path="/list-questions-by-accessibility")
     public @ResponseBody
     List<Questions> listQuestionsAccessibility(@RequestBody Questions question) {
         return questionRepository.
@@ -148,4 +152,6 @@ public class QuestionsController {
                         question.getWhoCanSee(),
                         1);
     }
+
+
 }
