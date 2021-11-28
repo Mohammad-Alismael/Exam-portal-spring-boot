@@ -2,6 +2,7 @@ package CS434.ExamPortal.Controller;
 
 import CS434.ExamPortal.Classes.RandomUuidStringCreator;
 import CS434.ExamPortal.DAO.Exams;
+import CS434.ExamPortal.DTO.ExamsDTO;
 import CS434.ExamPortal.Repositories.ExamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,20 +38,21 @@ public class ExamsController {
     }
 
     @PostMapping("/update-exam")
-    public ResponseStatusException updateExam(@RequestBody Exams newExam) {
+    public ResponseStatusException updateExam(@RequestBody ExamsDTO newExam) {
         Exams currentExam = examRepository.findExamsByCreatorIdAndExamId(newExam.getCreatorId(),newExam.getExamId());
         if (currentExam == null){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
         }
         currentExam.setTitle(newExam.getTitle());
         currentExam.setScore(newExam.getScore());
+
         if (newExam.getStartingAt() != null){
-            currentExam.setStartingAt(newExam.getStartingAt());
+            currentExam.setStartingAt(Timestamp.valueOf(newExam.getStartingAt()));
         }
         if (newExam.getEndingAt() != null){
-            currentExam.setEndingAt(newExam.getEndingAt());
+            currentExam.setStartingAt(Timestamp.valueOf(newExam.getStartingAt()));
         }
-        examRepository.save(newExam);
+        examRepository.save(currentExam);
         return  new ResponseStatusException(HttpStatus.ACCEPTED);
 
     }

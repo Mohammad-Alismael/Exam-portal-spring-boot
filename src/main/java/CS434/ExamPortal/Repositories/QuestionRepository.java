@@ -10,6 +10,8 @@ public interface QuestionRepository extends JpaRepository<Questions,Integer> {
 
     Questions findByQuestionId(Integer questionId);
 
+    Questions findQuestionsByQuestionIdAndAndExamIdAndIsActive(Integer questionId,String examId,Integer isActive);
+
     @Query(value = "SELECT * FROM Questions", nativeQuery = true)
     List<Questions> findAllQuestions();
 

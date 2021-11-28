@@ -79,6 +79,20 @@ public class QuestionsController {
         return  questionRepository.findQuestionsByExamIdAndIsActiveAndCreatorExamId(examId,1,creatorId);
     }
 
+    @GetMapping (path="/list-question-by-id")
+    public @ResponseBody
+    Object listQuestionById (@RequestBody Questions question) {
+        String examId = question.getExamId();
+        Integer questionId = question.getQuestionId();
+        Questions q = questionRepository
+                .findQuestionsByQuestionIdAndAndExamIdAndIsActive(questionId,examId,1);
+        if (q == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "you have no permission!");
+        }
+
+        return q;
+    }
+
     @GetMapping (path="/list-questions-all")
     public @ResponseBody
     List<Questions> listQuestions () {
