@@ -1,13 +1,15 @@
 package CS434.ExamPortal.DTO;
 
-public class QuestionsDTO {
+import CS434.ExamPortal.behavioralPattern.nullObject.IQuestions;
+
+public class QuestionsDTO implements IQuestions {
     private Integer questionId;
     private Integer questionType;
     private Integer creatorExamId;
     private String questionText;
     private Integer points;
     private String examId;
-    private Byte isActive;
+    private Integer isActive;
     private Integer whoCanSee;
 
     public Integer getQuestionId() {
@@ -58,11 +60,11 @@ public class QuestionsDTO {
         this.examId = examId;
     }
 
-    public Byte getIsActive() {
+    public Integer getIsActive() {
         return this.isActive;
     }
 
-    public void setIsActive(Byte isActive) {
+    public void setIsActive(Integer isActive) {
         this.isActive = isActive;
     }
 
@@ -72,5 +74,10 @@ public class QuestionsDTO {
 
     public void setWhoCanSee(Integer whoCanSee) {
         this.whoCanSee = whoCanSee;
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return true;
     }
 }

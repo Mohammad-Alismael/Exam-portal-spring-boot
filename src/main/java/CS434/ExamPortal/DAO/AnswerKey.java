@@ -6,9 +6,9 @@ import javax.persistence.*;
 @Table(name = "Answer_key")
 public class AnswerKey {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "answer_key_id")
-    private Integer answerKeyId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
 
     @Column(name = "question_id")
     private Integer questionId;
@@ -16,12 +16,12 @@ public class AnswerKey {
     @Column(name = "correct_answer")
     private String correctAnswer;
 
-    public Integer getAnswerKeyId() {
-        return this.answerKeyId;
+    public Integer getId() {
+        return this.id;
     }
 
-    public void setAnswerKeyId(Integer answerKeyId) {
-        this.answerKeyId = answerKeyId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getQuestionId() {
