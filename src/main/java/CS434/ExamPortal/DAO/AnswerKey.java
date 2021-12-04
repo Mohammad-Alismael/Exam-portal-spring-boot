@@ -14,7 +14,7 @@ public class AnswerKey {
     private Integer questionId;
 
     @Column(name = "correct_answer")
-    private String correctAnswer;
+    private Integer correctAnswer;
 
     public Integer getId() {
         return this.id;
@@ -32,11 +32,11 @@ public class AnswerKey {
         this.questionId = questionId;
     }
 
-    public String getCorrectAnswer() {
+    public Integer getCorrectAnswer() {
         return this.correctAnswer;
     }
 
-    public void setCorrectAnswer(String correctAnswer) {
+    public void setCorrectAnswer(Integer correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
 }

@@ -2,6 +2,10 @@ package CS434.ExamPortal.RepositoriesImplement;
 
 import CS434.ExamPortal.DAO.Questions;
 import CS434.ExamPortal.Repositories.QuestionRepository;
+import CS434.ExamPortal.Repositories.UserRepository;
+import CS434.ExamPortal.behavioralPattern.nullObject.IQuestions;
+import CS434.ExamPortal.behavioralPattern.nullObject.NullObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,13 +15,25 @@ import java.util.List;
 import java.util.Optional;
 
 public class QuestionRepositoryImpl implements QuestionRepository {
+
+    @Autowired
+    private QuestionRepository questionRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Override
-    public Questions findByQuestionId(Integer questionId) {
-        return null;
+    public IQuestions findByQuestionId(Integer questionId) {
+       Questions question = questionRepository
+               .findByQusId(questionId);;
+        System.out.println(questionId);
+        if(question == null){
+            return NullObject.getInstance();
+        }else {
+            return question;
+        }
     }
 
     @Override
-    public Questions findQuestionsByQuestionIdAndAndExamIdAndIsActive(Integer questionId, String examId, Integer isActive) {
+    public Questions findByQusId(Integer questionId) {
         return null;
     }
 
@@ -28,6 +44,11 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public List<Questions> findQuestionsByExamIdAndIsActiveAndCreatorExamId(String examId, Integer isActive, Integer creatorId) {
+        return null;
+    }
+
+    @Override
+    public List<Questions> findQuestionsByCreatorExamIdAndIsActive(String examId, Integer isActive) {
         return null;
     }
 

@@ -1,13 +1,12 @@
 package CS434.ExamPortal.DAO;
 
 import CS434.ExamPortal.behavioralPattern.nullObject.IQuestions;
-import CS434.ExamPortal.behavioralPattern.nullObject.NullQuestions;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Questions")
-public class Questions  {
+public class Questions implements IQuestions {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
@@ -99,17 +98,7 @@ public class Questions  {
     }
 
     @Override
-    public String toString() {
-        return "Questions{" +
-                "questionId=" + questionId +
-                ", questionType=" + questionType +
-                ", creatorExamId=" + creatorExamId +
-                ", questionText='" + questionText + '\'' +
-                ", points=" + points +
-                ", examId='" + examId + '\'' +
-                ", isActive=" + isActive +
-                ", whoCanSee=" + whoCanSee +
-                '}';
+    public boolean isAvailable() {
+        return true;
     }
-
 }

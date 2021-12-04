@@ -7,6 +7,8 @@ import CS434.ExamPortal.Repositories.ExamRepository;
 import CS434.ExamPortal.Repositories.OptionRepository;
 import CS434.ExamPortal.Repositories.QuestionRepository;
 import CS434.ExamPortal.Repositories.UserRepository;
+import CS434.ExamPortal.RepositoriesImplement.QuestionRepositoryImpl;
+import CS434.ExamPortal.behavioralPattern.nullObject.IQuestions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,19 +23,25 @@ public class QuestionsController {
     @Autowired
     private QuestionRepository questionRepository;
     @Autowired
+    private QuestionRepositoryImpl questionRepositoryImpl;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private ExamRepository examRepository;
     @Autowired
     private OptionRepository optionRepository;
 
-    @PostMapping(path="/add-question") // Map ONLY POST Requests
+    @PostMapping(path="/add-question")
     public @ResponseBody
     ResponseStatusException storeQuestion (@RequestBody Questions question) {
        Users user = userRepository.findByUserId(question.getCreatorExamId());
+        if (user == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user doesn't exist");
+        }
         if (user.getRoleId() != 1){
            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
        }
+
         Exams exam = examRepository
                 .findExamsByCreatorIdAndExamId(
                         question.getCreatorExamId(),
@@ -43,7 +51,7 @@ public class QuestionsController {
 
         questionRepository.save(question);
 
-       return  new ResponseStatusException(HttpStatus.CREATED);
+       return  new ResponseStatusException(HttpStatus.CREATED,"created successfully!");
 
     }
 
@@ -62,7 +70,7 @@ public class QuestionsController {
         if (user.getRoleId() != 1){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
         }
-        Questions quest = questionRepository.findByQuestionId(question.getQuestionId());
+        Questions quest = (Questions) questionRepository.findByQuestionId(question.getQuestionId());
         quest.setQuestionText(question.getQuestionText());
         quest.setPoints(question.getPoints());
         // the rest
@@ -78,7 +86,7 @@ public class QuestionsController {
         if (user.getRoleId() != 1){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
         }
-        Questions quest = questionRepository.findByQuestionId(question.getQuestionId());
+        Questions quest = (Questions) questionRepository.findByQuestionId(question.getQuestionId());
         if (quest.getCreatorExamId() != user.getUserId()){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
         }
@@ -92,9 +100,10 @@ public class QuestionsController {
     public @ResponseBody
     List<Questions> listQuestions (@RequestBody Exams exam) {
         String examId = exam.getExamId();
-        Integer creatorId = exam.getCreatorId();
-        return  questionRepository.findQuestionsByExamIdAndIsActiveAndCreatorExamId(examId,1,creatorId);
+        return  questionRepository.findQuestionsByCreatorExamIdAndIsActive(examId,1);
     }
+
+
 
     @GetMapping (path="/list-questions-randomly")
     public @ResponseBody
@@ -115,15 +124,14 @@ public class QuestionsController {
     @PostMapping (path="/list-question-by-id")
     public @ResponseBody
     Object listQuestionById (@RequestBody Questions question) {
-        String examId = question.getExamId();
         Integer questionId = question.getQuestionId();
-        Questions q = questionRepository
-                .findQuestionsByQuestionIdAndAndExamIdAndIsActive(questionId,examId,1);
-        if (q == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "you have no permission!");
+        IQuestions quest = questionRepositoryImpl
+                .findByQuestionId(questionId);
+        if (!quest.isAvailable()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question not found!");
         }
+        return quest;
 
-        return q;
     }
 
     @PostMapping (path="/list-question-by-type")

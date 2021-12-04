@@ -1,13 +1,13 @@
 package CS434.ExamPortal.behavioralPattern.nullObject;
 
-public class NullQuestions implements IQuestions{
-    public static NullQuestions quest = new NullQuestions();
+public class NullObject implements IQuestions{
+    public static NullObject quest = new NullObject();
     @Override
     public boolean isAvailable() {
         return false;
     }
 
-    public static NullQuestions getInstance() {
+    public static NullObject getInstance() {
         return quest;
     }
 }

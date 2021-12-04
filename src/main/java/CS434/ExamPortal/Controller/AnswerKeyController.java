@@ -21,7 +21,7 @@ public class AnswerKeyController {
     @GetMapping(path="/set-answer-key")
     public @ResponseBody
     AnswerKey setAnswerKey(@RequestBody AnswerKey answerKey) {
-        Questions question = questionRepository.findByQuestionId(answerKey.getQuestionId());
+        Questions question = (Questions) questionRepository.findByQuestionId(answerKey.getQuestionId());
 
         if (question == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
@@ -34,7 +34,7 @@ public class AnswerKeyController {
     @PostMapping(path="/get-answer-key")
     public @ResponseBody
     AnswerKey getAnswerKey(@RequestBody AnswerKey answerKey) {
-        Questions question = questionRepository.findByQuestionId(answerKey.getQuestionId());
+//        Questions question = questionRepository.findByQuestionId(answerKey.getQuestionId());
 
 //        if (question == null){
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
@@ -47,7 +47,7 @@ public class AnswerKeyController {
     @PostMapping(path="/update-answer-key")
     public @ResponseBody
     ResponseStatusException updateAnswerKey(@RequestBody AnswerKey answerKey) {
-        Questions question = questionRepository.findByQuestionId(answerKey.getQuestionId());
+        Questions question = (Questions) questionRepository.findByQuestionId(answerKey.getQuestionId());
 
         AnswerKey currentAnswerKey = answerKeyRepository.findAnswerKeyById(answerKey.getId());
         if (currentAnswerKey == null){
@@ -63,7 +63,7 @@ public class AnswerKeyController {
     @PostMapping(path="/delete-answer-key")
     public @ResponseBody
     ResponseStatusException deleteAnswerKey(@RequestBody AnswerKey answerKey) {
-        Questions question = questionRepository.findByQuestionId(answerKey.getQuestionId());
+        Questions question = (Questions) questionRepository.findByQuestionId(answerKey.getQuestionId());
 
         AnswerKey currentAnswerKey = answerKeyRepository.findAnswerKeyById(answerKey.getId());
         if (currentAnswerKey == null){

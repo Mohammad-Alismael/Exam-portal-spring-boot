@@ -2,16 +2,11 @@ package CS434.ExamPortal.Controller;
 
 import CS434.ExamPortal.DAO.QuestionOptions;
 import CS434.ExamPortal.DAO.Questions;
-import CS434.ExamPortal.Repositories.ExamRepository;
 import CS434.ExamPortal.Repositories.OptionRepository;
 import CS434.ExamPortal.Repositories.QuestionRepository;
-import CS434.ExamPortal.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -28,7 +23,7 @@ public class OptionsController {
     @PostMapping(path="/set-question-options")
     public @ResponseBody
     QuestionOptions setOptions(@RequestBody QuestionOptions questionOptions) {
-        Questions question = questionRepository.findByQuestionId(questionOptions.getQuestionId());
+        Questions question = (Questions) questionRepository.findByQuestionId(questionOptions.getQuestionId());
 
         if (question == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
@@ -41,7 +36,7 @@ public class OptionsController {
     @PostMapping (path="/update-question-options")
     public @ResponseBody
     QuestionOptions updateOptions(@RequestBody QuestionOptions questionOptions) {
-        Questions question = questionRepository.findByQuestionId(questionOptions.getQuestionId());
+        Questions question = (Questions) questionRepository.findByQuestionId(questionOptions.getQuestionId());
         List<QuestionOptions> currentQ = optionRepository
                 .findQuestionOptionsByQuestionId(questionOptions.getQuestionId());
         if (question == null){

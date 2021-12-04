@@ -37,11 +37,13 @@ public class ExamsController {
     @PostMapping("/add-exam")
     public Exams addExam(@RequestBody Exams exam) {
         Users user = userRepository.findByUserId(exam.getCreatorId());
+        if (user == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user doesn't exist");
+        }
         if (user.getRoleId() != 1){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
         }
         exam.setExamId(RandomUuidStringCreator.getInstance().getRandomUuid());
-        Timestamp instant = Timestamp.from(Instant.now());
         exam.setStartingAt(exam.getStartingAt());
         exam.setEndingAt(exam.getEndingAt());
         exam.setCreatedAt(new Date().getTime());
