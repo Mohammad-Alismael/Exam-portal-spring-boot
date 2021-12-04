@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -43,14 +44,14 @@ public class ExamsController {
         Timestamp instant = Timestamp.from(Instant.now());
         exam.setStartingAt(exam.getStartingAt());
         exam.setEndingAt(exam.getEndingAt());
-        exam.setCreatedAt(instant);
+        exam.setCreatedAt(new Date().getTime());
         examRepository.save(exam);
         return exam;
 
     }
 
     @PostMapping("/update-exam")
-    public ResponseStatusException updateExam(@RequestBody ExamsDTO newExam) {
+    public ResponseStatusException updateExam(@RequestBody Exams newExam) {
         Users user = userRepository.findByUserId(newExam.getCreatorId());
         if (user.getRoleId() != 1){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
@@ -62,11 +63,11 @@ public class ExamsController {
         currentExam.setTitle(newExam.getTitle());
         currentExam.setScore(newExam.getScore());
 
-        if (newExam.getStartingAt() != null){
-            currentExam.setStartingAt(Timestamp.valueOf(newExam.getStartingAt()));
+        if (newExam.getStartingAt() != 0){
+            currentExam.setStartingAt(newExam.getStartingAt());
         }
-        if (newExam.getEndingAt() != null){
-            currentExam.setStartingAt(Timestamp.valueOf(newExam.getStartingAt()));
+        if (newExam.getEndingAt() != 0){
+            currentExam.setStartingAt(newExam.getStartingAt());
         }
         examRepository.save(currentExam);
         return  new ResponseStatusException(HttpStatus.ACCEPTED);

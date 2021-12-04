@@ -19,13 +19,13 @@ public class Exams {
     private Integer creatorId;
 
     @Column(name = "starting_at")
-    private java.sql.Timestamp startingAt;
+    private long startingAt;
 
     @Column(name = "ending_at")
-    private java.sql.Timestamp endingAt;
+    private long endingAt;
 
     @Column(name = "created_at")
-    private java.sql.Timestamp createdAt;
+    private long createdAt;
 
     public String getExamId() {
         return this.examId;
@@ -59,27 +59,27 @@ public class Exams {
         this.creatorId = creatorId;
     }
 
-    public java.sql.Timestamp getStartingAt() {
+    public long getStartingAt() {
         return this.startingAt;
     }
 
-    public void setStartingAt(java.sql.Timestamp startingAt) {
+    public void setStartingAt(long startingAt) {
         this.startingAt = startingAt;
     }
 
-    public java.sql.Timestamp getEndingAt() {
+    public long getEndingAt() {
         return this.endingAt;
     }
 
-    public void setEndingAt(java.sql.Timestamp endingAt) {
+    public void setEndingAt(long endingAt) {
         this.endingAt = endingAt;
     }
 
-    public java.sql.Timestamp getCreatedAt() {
+    public long getCreatedAt() {
         return this.createdAt;
     }
 
-    public void setCreatedAt(java.sql.Timestamp createdAt) {
+    public void setCreatedAt(long createdAt) {
         this.createdAt = createdAt;
     }
 }

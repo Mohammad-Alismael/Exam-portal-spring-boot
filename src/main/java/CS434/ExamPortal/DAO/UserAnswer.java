@@ -6,25 +6,34 @@ import javax.persistence.*;
 @Table(name = "User_answer")
 public class UserAnswer {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Integer id;
+
     @Column(name = "user_id")
     private Integer userId;
+
+    @Column(name = "question_id")
+    private Integer questionId;
 
     @Column(name = "user_answer")
     private String userAnswer;
 
-    @Column(name = "questionID")
-    private Integer questionId;
+    @Column(name = "points")
+    private Integer points;
+
+    @Column(name = "is_correct")
+    private Integer isCorrect;
 
     @Column(name = "answered_at")
-    private String answeredAt;
+    private long answeredAt;
 
-    @Column(name = "points_each_question")
-    private Integer pointsEachQuestion;
+    public Integer getId() {
+        return this.id;
+    }
 
-    @Column(name = "isCorrect")
-    private Byte isCorrect;
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getUserId() {
         return this.userId;
@@ -32,14 +41,6 @@ public class UserAnswer {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public String getUserAnswer() {
-        return this.userAnswer;
-    }
-
-    public void setUserAnswer(String userAnswer) {
-        this.userAnswer = userAnswer;
     }
 
     public Integer getQuestionId() {
@@ -50,27 +51,35 @@ public class UserAnswer {
         this.questionId = questionId;
     }
 
-    public String getAnsweredAt() {
-        return this.answeredAt;
+    public String getUserAnswer() {
+        return this.userAnswer;
     }
 
-    public void setAnsweredAt(String answeredAt) {
-        this.answeredAt = answeredAt;
+    public void setUserAnswer(String userAnswer) {
+        this.userAnswer = userAnswer;
     }
 
-    public Integer getPointsEachQuestion() {
-        return this.pointsEachQuestion;
+    public Integer getPoints() {
+        return this.points;
     }
 
-    public void setPointsEachQuestion(Integer pointsEachQuestion) {
-        this.pointsEachQuestion = pointsEachQuestion;
+    public void setPoints(Integer points) {
+        this.points = points;
     }
 
-    public Byte getIsCorrect() {
+    public Integer getIsCorrect() {
         return this.isCorrect;
     }
 
-    public void setIsCorrect(Byte isCorrect) {
+    public void setIsCorrect(Integer isCorrect) {
         this.isCorrect = isCorrect;
+    }
+
+    public long getAnsweredAt() {
+        return this.answeredAt;
+    }
+
+    public void setAnsweredAt(long answeredAt) {
+        this.answeredAt = answeredAt;
     }
 }

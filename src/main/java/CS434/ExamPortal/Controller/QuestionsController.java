@@ -1,7 +1,6 @@
 package CS434.ExamPortal.Controller;
 
 import CS434.ExamPortal.DAO.Exams;
-import CS434.ExamPortal.DAO.QuestionOptions;
 import CS434.ExamPortal.DAO.Questions;
 import CS434.ExamPortal.DAO.Users;
 import CS434.ExamPortal.Repositories.ExamRepository;
