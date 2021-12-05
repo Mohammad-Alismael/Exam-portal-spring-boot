@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<Questions,Integer> {
@@ -26,5 +27,4 @@ public interface QuestionRepository extends JpaRepository<Questions,Integer> {
     List<Questions> findQuestionsByExamIdAndWhoCanSeeAndIsActive(String examId, Integer who_can_see, Integer isActive);
 
     List<Questions> findQuestionsByExamIdAndIsActive(String examId,Integer isActive);
-
 }

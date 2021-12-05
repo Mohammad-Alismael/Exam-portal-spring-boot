@@ -36,7 +36,7 @@ public class ExamsController {
 
     @PostMapping("/add-exam")
     public Exams addExam(@RequestBody Exams exam) {
-        Users user = userRepository.findByUserId(exam.getCreatorId());
+        Users user = userRepository.findByUserIdv2(exam.getCreatorId());
         if (user == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user doesn't exist");
         }
@@ -54,7 +54,7 @@ public class ExamsController {
 
     @PostMapping("/update-exam")
     public ResponseStatusException updateExam(@RequestBody Exams newExam) {
-        Users user = userRepository.findByUserId(newExam.getCreatorId());
+        Users user = userRepository.findByUserIdv2(newExam.getCreatorId());
         if (user.getRoleId() != 1){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
         }
@@ -77,7 +77,7 @@ public class ExamsController {
 
     @PostMapping("/delete-exam")
     public ResponseStatusException deleteExam(@RequestBody ExamsDTO exam) {
-        Users user = userRepository.findByUserId(exam.getCreatorId());
+        Users user = userRepository.findByUserIdv2(exam.getCreatorId());
         if (user.getRoleId() != 1){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
         }

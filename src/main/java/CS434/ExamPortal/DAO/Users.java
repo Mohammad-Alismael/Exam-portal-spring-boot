@@ -1,12 +1,13 @@
 package CS434.ExamPortal.DAO;
 
 import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
+import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Users")
-public class Users implements INullObject {
+public class Users implements NullUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")

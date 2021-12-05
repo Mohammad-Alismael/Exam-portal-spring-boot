@@ -29,7 +29,7 @@ public class UserAnswerController {
     @PostMapping(path="/set-user-answer")
     public @ResponseBody
     ResponseStatusException postUserAnswer(@RequestBody UserAnswer userAnswer) {
-        Users currentUser = userRepository.findByUserId(userAnswer.getUserId());
+        Users currentUser = userRepository.findByUserIdv2(userAnswer.getUserId());
         if (currentUser == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
         }
@@ -42,7 +42,7 @@ public class UserAnswerController {
     @PostMapping(path="/update-user-answer")
     public @ResponseBody
     ResponseStatusException updateUserAnswer(@RequestBody UserAnswer userAnswer) {
-        Users currentUser = userRepository.findByUserId(userAnswer.getUserId());
+        Users currentUser = userRepository.findByUserIdv2(userAnswer.getUserId());
 
         UserAnswer currentUserAnswer = userAnswerRepository
                 .findUserAnswerByUserIdAndQuestionId(

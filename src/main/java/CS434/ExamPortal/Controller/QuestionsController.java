@@ -9,7 +9,10 @@ import CS434.ExamPortal.Repositories.QuestionRepository;
 import CS434.ExamPortal.Repositories.UserRepository;
 import CS434.ExamPortal.RepositoriesImplement.ExamRepositoryImpl;
 import CS434.ExamPortal.RepositoriesImplement.QuestionRepositoryImpl;
+import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
 import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
+import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
+import CS434.ExamPortal.behavioralPattern.nullObject.NullUserObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +31,8 @@ public class QuestionsController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private UserRepositoryImpl userRepositoryImpl;
+    @Autowired
     private ExamRepository examRepository;
     @Autowired
     private ExamRepositoryImpl examRepositoryImpl;
@@ -37,8 +42,8 @@ public class QuestionsController {
     @PostMapping(path="/add-question")
     public @ResponseBody
     ResponseStatusException storeQuestion (@RequestBody Questions question) {
-       Users user = userRepository.findByUserId(question.getCreatorExamId());
-        if (user == null){
+       NullUser user = userRepositoryImpl.findByUserId(question.getCreatorExamId());
+        if (!user.isAvailable()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user doesn't exist");
         }
         if (user.getRoleId() != 1){
@@ -69,7 +74,7 @@ public class QuestionsController {
     @PostMapping(path="/update-question") // Map ONLY POST Requests
     public @ResponseBody
     ResponseStatusException updateQuestion (@RequestBody Questions question) {
-        Users user = userRepository.findByUserId(question.getCreatorExamId());
+        Users user = userRepository.findByUserIdv2(question.getCreatorExamId());
         if (user.getRoleId() != 1){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
         }
@@ -85,7 +90,7 @@ public class QuestionsController {
     @PostMapping(path="/delete-question")
     public @ResponseBody
     ResponseStatusException deleteQuestion (@RequestBody Questions question) {
-        Users user = userRepository.findByUserId(question.getCreatorExamId());
+        Users user = userRepository.findByUserIdv2(question.getCreatorExamId());
         if (user.getRoleId() != 1){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
         }
