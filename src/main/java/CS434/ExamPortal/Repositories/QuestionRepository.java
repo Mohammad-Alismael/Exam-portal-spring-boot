@@ -27,4 +27,6 @@ public interface QuestionRepository extends JpaRepository<Questions,Integer> {
     List<Questions> findQuestionsByExamIdAndWhoCanSeeAndIsActive(String examId, Integer who_can_see, Integer isActive);
 
     List<Questions> findQuestionsByExamIdAndIsActive(String examId,Integer isActive);
+
+    void addQuestion(Questions questions);
 }

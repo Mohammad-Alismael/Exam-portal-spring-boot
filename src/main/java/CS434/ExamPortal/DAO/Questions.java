@@ -101,4 +101,18 @@ public class Questions implements INullObject {
     public boolean isAvailable() {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Questions{" +
+                "questionId=" + questionId +
+                ", questionType=" + questionType +
+                ", creatorExamId=" + creatorExamId +
+                ", questionText='" + questionText + '\'' +
+                ", points=" + points +
+                ", examId='" + examId + '\'' +
+                ", isActive=" + isActive +
+                ", whoCanSee=" + whoCanSee +
+                '}';
+    }
 }

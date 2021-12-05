@@ -9,4 +9,6 @@ public interface ClassroomRepository extends JpaRepository<Classroom,Integer> {
 
     List<Classroom> findClassroomByInstructorId(Integer instructorID);
 
+    void  removeByInstructorIdAndStudentId(Integer instructorID, Integer studentId);
+
 }

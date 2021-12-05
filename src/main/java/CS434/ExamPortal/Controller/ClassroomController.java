@@ -34,4 +34,11 @@ public class ClassroomController {
         return classroomRepository.findClassroomByInstructorId(classroom.getInstructorId());
     }
 
+    @PostMapping("/delete-class-instructor")
+    public void deleteClassInstructor(@RequestBody Classroom classroom) {
+        classroomRepository.removeByInstructorIdAndStudentId(
+                classroom.getInstructorId(),
+                classroom.getStudentId()
+        );
+    }
 }

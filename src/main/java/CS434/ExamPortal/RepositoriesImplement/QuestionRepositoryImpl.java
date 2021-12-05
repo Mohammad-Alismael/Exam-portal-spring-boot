@@ -68,6 +68,12 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
+    public void addQuestion(Questions questions) {
+        System.out.println(questions);
+        questionRepository.save(questions);
+    }
+
+    @Override
     public List<Questions> findAll() {
         return null;
     }
