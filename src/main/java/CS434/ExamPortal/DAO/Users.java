@@ -1,10 +1,12 @@
 package CS434.ExamPortal.DAO;
 
+import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Users")
-public class Users {
+public class Users implements INullObject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -71,5 +73,10 @@ public class Users {
                 ", emailId='" + emailId + '\'' +
                 ", roleId=" + roleId +
                 '}';
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return true;
     }
 }

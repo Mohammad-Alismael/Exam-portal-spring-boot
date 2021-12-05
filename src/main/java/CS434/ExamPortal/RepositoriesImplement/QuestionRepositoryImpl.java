@@ -3,7 +3,7 @@ package CS434.ExamPortal.RepositoriesImplement;
 import CS434.ExamPortal.DAO.Questions;
 import CS434.ExamPortal.Repositories.QuestionRepository;
 import CS434.ExamPortal.Repositories.UserRepository;
-import CS434.ExamPortal.behavioralPattern.nullObject.IQuestions;
+import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
 import CS434.ExamPortal.behavioralPattern.nullObject.NullObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -21,10 +21,10 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     @Autowired
     private UserRepository userRepository;
     @Override
-    public IQuestions findByQuestionId(Integer questionId) {
+    public INullObject findByQuestionId(Integer questionId) {
        Questions question = questionRepository
-               .findByQusId(questionId);;
-        System.out.println(questionId);
+               .findByQusId(questionId);
+
         if(question == null){
             return NullObject.getInstance();
         }else {

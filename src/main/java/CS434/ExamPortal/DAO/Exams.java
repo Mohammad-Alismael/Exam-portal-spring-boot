@@ -1,10 +1,12 @@
 package CS434.ExamPortal.DAO;
 
+import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Exams")
-public class Exams {
+public class Exams implements INullObject {
     @Id
     @Column(name = "exam_id")
     private String examId;
@@ -81,5 +83,23 @@ public class Exams {
 
     public void setCreatedAt(long createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Exams{" +
+                "examId='" + examId + '\'' +
+                ", title='" + title + '\'' +
+                ", score=" + score +
+                ", creatorId=" + creatorId +
+                ", startingAt=" + startingAt +
+                ", endingAt=" + endingAt +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

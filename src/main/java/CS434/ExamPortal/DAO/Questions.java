@@ -1,12 +1,12 @@
 package CS434.ExamPortal.DAO;
 
-import CS434.ExamPortal.behavioralPattern.nullObject.IQuestions;
+import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Questions")
-public class Questions implements IQuestions {
+public class Questions implements INullObject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")

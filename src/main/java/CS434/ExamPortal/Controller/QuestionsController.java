@@ -7,8 +7,9 @@ import CS434.ExamPortal.Repositories.ExamRepository;
 import CS434.ExamPortal.Repositories.OptionRepository;
 import CS434.ExamPortal.Repositories.QuestionRepository;
 import CS434.ExamPortal.Repositories.UserRepository;
+import CS434.ExamPortal.RepositoriesImplement.ExamRepositoryImpl;
 import CS434.ExamPortal.RepositoriesImplement.QuestionRepositoryImpl;
-import CS434.ExamPortal.behavioralPattern.nullObject.IQuestions;
+import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,8 @@ public class QuestionsController {
     @Autowired
     private ExamRepository examRepository;
     @Autowired
+    private ExamRepositoryImpl examRepositoryImpl;
+    @Autowired
     private OptionRepository optionRepository;
 
     @PostMapping(path="/add-question")
@@ -42,12 +45,12 @@ public class QuestionsController {
            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
        }
 
-        Exams exam = examRepository
+        INullObject exam = examRepositoryImpl
                 .findExamsByCreatorIdAndExamId(
                         question.getCreatorExamId(),
                         question.getExamId()
                         );
-       if (exam == null)  throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "exam id doesn't exists");
+       if (!exam.isAvailable())  throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "exam id doesn't exists");
 
         questionRepository.save(question);
 
@@ -125,7 +128,7 @@ public class QuestionsController {
     public @ResponseBody
     Object listQuestionById (@RequestBody Questions question) {
         Integer questionId = question.getQuestionId();
-        IQuestions quest = questionRepositoryImpl
+        INullObject quest = questionRepositoryImpl
                 .findByQuestionId(questionId);
         if (!quest.isAvailable()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question not found!");

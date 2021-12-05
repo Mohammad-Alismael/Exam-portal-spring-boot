@@ -1,6 +1,6 @@
 package CS434.ExamPortal.behavioralPattern.nullObject;
 
-public interface IQuestions {
+public interface INullObject {
     boolean isAvailable();
 
 }

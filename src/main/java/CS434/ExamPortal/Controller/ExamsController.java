@@ -58,7 +58,7 @@ public class ExamsController {
         if (user.getRoleId() != 1){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
         }
-        Exams currentExam = examRepository.findExamsByCreatorIdAndExamId(newExam.getCreatorId(),newExam.getExamId());
+        Exams currentExam = examRepository.findExamsByCreatorIdAndExamIdv2(newExam.getCreatorId(),newExam.getExamId());
         if (currentExam == null){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
         }

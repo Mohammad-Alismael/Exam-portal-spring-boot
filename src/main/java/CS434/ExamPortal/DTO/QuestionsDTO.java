@@ -1,8 +1,8 @@
 package CS434.ExamPortal.DTO;
 
-import CS434.ExamPortal.behavioralPattern.nullObject.IQuestions;
+import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
 
-public class QuestionsDTO implements IQuestions {
+public class QuestionsDTO implements INullObject {
     private Integer questionId;
     private Integer questionType;
     private Integer creatorExamId;
