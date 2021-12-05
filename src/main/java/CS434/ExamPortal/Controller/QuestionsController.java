@@ -3,6 +3,7 @@ package CS434.ExamPortal.Controller;
 import CS434.ExamPortal.DAO.Exams;
 import CS434.ExamPortal.DAO.Questions;
 import CS434.ExamPortal.DAO.Users;
+import CS434.ExamPortal.ExceptionHandlers.NoSuchElementFoundException;
 import CS434.ExamPortal.Repositories.ExamRepository;
 import CS434.ExamPortal.Repositories.OptionRepository;
 import CS434.ExamPortal.Repositories.QuestionRepository;
@@ -15,6 +16,7 @@ import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
 import CS434.ExamPortal.behavioralPattern.nullObject.NullUserObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -39,6 +41,17 @@ public class QuestionsController {
     @Autowired
     private OptionRepository optionRepository;
 
+    @ExceptionHandler(NoSuchElementFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<String> handleNoSuchElementFoundException(
+            NoSuchElementFoundException exception
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
+    }
+
+
     @PostMapping(path="/add-question")
     public @ResponseBody
     ResponseStatusException storeQuestion (@RequestBody Questions question) {
@@ -58,7 +71,6 @@ public class QuestionsController {
        if (!exam.isAvailable())  throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "exam id doesn't exists");
 
         questionRepository.save(question);
-
        return  new ResponseStatusException(HttpStatus.CREATED,"created successfully!");
 
     }
