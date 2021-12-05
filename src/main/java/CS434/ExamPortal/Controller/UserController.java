@@ -2,6 +2,8 @@ package CS434.ExamPortal.Controller;
 
 import CS434.ExamPortal.DAO.Users;
 import CS434.ExamPortal.Repositories.UserRepository;
+import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
+import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,8 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserRepositoryImpl userRepositoryImpl;
 
     @PostMapping(path="/authenticate") // Map ONLY POST Requests
     public @ResponseBody
@@ -37,10 +41,9 @@ public class UserController {
     @PostMapping(path="/add-user") // Map ONLY POST Requests
     public @ResponseBody
     Users addNewUser (@RequestBody Users userInfo) {
-        Users users = userRepository.findByUsername(userInfo.getUsername());
-
-        if (users == null){
-            userRepository.save(userInfo);
+        NullUser users = userRepositoryImpl.findByUsername(userInfo.getUsername());
+        if (!users.isAvailable()){
+            userRepositoryImpl.addUser(userInfo);
             return userInfo;
         }else {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "username already taken");

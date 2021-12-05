@@ -1,10 +1,7 @@
 package CS434.ExamPortal.RepositoriesImplement;
 
-import CS434.ExamPortal.DAO.Questions;
 import CS434.ExamPortal.DAO.Users;
 import CS434.ExamPortal.Repositories.UserRepository;
-import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
-import CS434.ExamPortal.behavioralPattern.nullObject.NullObject;
 import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
 import CS434.ExamPortal.behavioralPattern.nullObject.NullUserObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,7 @@ import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +26,17 @@ public class UserRepositoryImpl implements UserRepository {
     @PersistenceContext
     public EntityManager em;
     @Override
-    public Users findByUsername(String username) {
+    public NullUser findByUsername(String username) {
+        Users user = userRepository.findByUsernamev2(username);
+        if (user == null){
+            return NullUserObject.getInstance();
+        }else {
+            return  user;
+        }
+    }
+
+    @Override
+    public Users findByUsernamev2(String username) {
         return null;
     }
 
@@ -46,6 +54,19 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Users findByUserIdv2(Integer userId) {
         return null;
+    }
+
+    @Transactional
+    @Override
+    public void addUser(Users user) {
+        em.createNativeQuery("INSERT INTO Users " +
+                "(username, password,email_id,role_id) " +
+                "VALUES (?,?,?,?)")
+                .setParameter(1, user.getUsername())
+                .setParameter(2, user.getPassword())
+                .setParameter(3, user.getEmailId())
+                .setParameter(4, user.getRoleId())
+                .executeUpdate();
     }
 
 
