@@ -11,6 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +23,10 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     private QuestionRepository questionRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @PersistenceContext
+    public EntityManager em;
+
     @Override
     public INullObject findByQuestionId(Integer questionId) {
        Questions question = questionRepository
@@ -67,10 +74,21 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         return null;
     }
 
+    @Transactional
     @Override
     public void addQuestion(Questions questions) {
         System.out.println(questions);
-        questionRepository.save(questions);
+        em.createNativeQuery("INSERT INTO Questions " +
+                "(question_type, creator_exam_id,question_text,points,exam_id,is_active,who_can_see) " +
+                "VALUES (?,?,?,?,?,?,?)")
+                .setParameter(1, questions.getQuestionType())
+                .setParameter(2, questions.getCreatorExamId())
+                .setParameter(3, questions.getQuestionText())
+                .setParameter(4, questions.getPoints())
+                .setParameter(5, questions.getExamId())
+                .setParameter(6, questions.getIsActive())
+                .setParameter(7, questions.getWhoCanSee())
+                .executeUpdate();
     }
 
     @Override

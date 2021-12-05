@@ -21,7 +21,13 @@ public class ClassroomController {
     @PostMapping("/set-classroom-to-students")
     public ResponseStatusException setClassroomStudents(@RequestBody Classroom classroom) {
         classroomRepository.save(classroom);
-        return  new ResponseStatusException(HttpStatus.ACCEPTED);
+        return new ResponseStatusException(HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/hgjjtuj64")
+    public Classroom hello123(@RequestBody Classroom classroom) {
+//        classroomRepository.save(classroom);
+        return new Classroom();
     }
 
     @GetMapping("/get-class-students")

@@ -59,19 +59,12 @@ public class QuestionsController {
                         );
        if (!exam.isAvailable())  throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "exam id doesn't exists");
 
-        questionRepository.save(question);
+        questionRepositoryImpl.addQuestion(question);
 
        return  new ResponseStatusException(HttpStatus.CREATED,"created successfully!");
 
     }
 
-    @PostMapping(path="/add-question2") // Map ONLY POST Requests
-    public @ResponseBody
-    Questions storeQuestion2 (@RequestBody Questions question) {
-
-        return question;
-
-    }
 
     @PostMapping(path="/update-question") // Map ONLY POST Requests
     public @ResponseBody
@@ -81,10 +74,12 @@ public class QuestionsController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
         }
         Questions quest = (Questions) questionRepository.findByQuestionId(question.getQuestionId());
+        System.out.println(quest);
         quest.setQuestionText(question.getQuestionText());
         quest.setPoints(question.getPoints());
+        quest.setWhoCanSee(question.getWhoCanSee());
         // the rest
-        questionRepository.save(quest);
+        questionRepositoryImpl.addQuestion(quest);
         return  new ResponseStatusException(HttpStatus.ACCEPTED);
 
     }
