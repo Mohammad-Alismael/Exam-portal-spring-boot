@@ -5,7 +5,8 @@ import CS434.ExamPortal.DAO.Users;
 import CS434.ExamPortal.Repositories.ClassroomRepository;
 import CS434.ExamPortal.Repositories.UserRepository;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
-import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
+import CS434.ExamPortal.observerPattern.ClassroomSubscriber;
+import CS434.ExamPortal.observerPattern.ClassroomObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +27,16 @@ public class ClassroomController {
     private UserRepositoryImpl userRepositoryImpl;
     @Autowired
     private UserRepository userRepository;
+
+    private ClassroomSubscriber classroomSubscriber = new ClassroomSubscriber();;
+
+
     @PostMapping("/set-classroom-to-students")
     public ResponseStatusException setClassroomStudents(@RequestBody Classroom classroom) {
-        NullUser user = userRepositoryImpl.findByUserId(classroom.getStudentId());
-        if (!user.isAvailable()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"student id doesn't exists");
-        classroomRepository.save(classroom);
+        classroomSubscriber.subscribe(new ClassroomObserver(classroom));
+//        NullUser user = userRepositoryImpl.findByUserId(classroom.getStudentId());
+//        if (!user.isAvailable()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"student id doesn't exists");
+//        classroomRepository.save(classroom);
         return new ResponseStatusException(HttpStatus.ACCEPTED);
     }
 
@@ -53,10 +59,7 @@ public class ClassroomController {
 
     @PostMapping("/delete-class-instructor")
     public RuntimeException deleteClassInstructor(@RequestBody Classroom classroom) {
-        classroomRepository.removeByInstructorIdAndStudentId(
-                classroom.getInstructorId(),
-                classroom.getStudentId()
-        );
+        classroomSubscriber.unsubscribe(new ClassroomObserver(classroom));
         return new ResponseStatusException(HttpStatus.GONE,"has been deleted successfully!");
     }
 
