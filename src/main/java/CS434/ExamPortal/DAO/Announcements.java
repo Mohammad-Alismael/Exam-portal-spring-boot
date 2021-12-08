@@ -3,20 +3,21 @@ package CS434.ExamPortal.DAO;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Annoucements")
-public class Annoucements {
+@Table(name = "Announcements")
+public class Announcements {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
     @Column(name = "instructor_id")
     private Integer instructorId;
 
-    @Column(name = "annoucment_text")
-    private String annoucmentText;
+    @Column(name = "announcement_text")
+    private String announcementText;
 
     @Column(name = "created_at")
-    private Integer createdAt;
+    private Long createdAt;
 
     public Integer getId() {
         return this.id;
@@ -34,19 +35,19 @@ public class Annoucements {
         this.instructorId = instructorId;
     }
 
-    public String getAnnoucmentText() {
-        return this.annoucmentText;
+    public String getAnnouncementText() {
+        return this.announcementText;
     }
 
-    public void setAnnoucmentText(String annoucmentText) {
-        this.annoucmentText = annoucmentText;
+    public void setAnnouncementText(String announcementText) {
+        this.announcementText = announcementText;
     }
 
-    public Integer getCreatedAt() {
+    public Long getCreatedAt() {
         return this.createdAt;
     }
 
-    public void setCreatedAt(Integer createdAt) {
+    public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
     }
 }

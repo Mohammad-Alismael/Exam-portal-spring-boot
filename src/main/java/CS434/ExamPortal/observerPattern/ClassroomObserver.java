@@ -3,10 +3,7 @@ package CS434.ExamPortal.observerPattern;
 import CS434.ExamPortal.DAO.Classroom;
 import CS434.ExamPortal.Repositories.ClassroomRepository;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
-import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 public class ClassroomObserver implements Observer{
     private Classroom classroom;
@@ -30,7 +27,7 @@ public class ClassroomObserver implements Observer{
 
 
     @Override
-    public void update(Classroom classroom) {
+    public void update(Classroom classroom, String announcementText) {
 
     }
 }

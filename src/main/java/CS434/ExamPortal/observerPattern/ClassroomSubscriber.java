@@ -52,11 +52,11 @@ public class ClassroomSubscriber {
                         classroom1.getStudentId());
     }
 
-    public void notifySubscriber() {
+    public void notifySubscriber(String announcementText) {
         Iterator<?> it = observers.iterator();
         while (it.hasNext()) {
             Observer o = (Observer) it.next();
-            o.update(o.getClassroom());
+            o.update(o.getClassroom(),announcementText);
         }
     }
 
