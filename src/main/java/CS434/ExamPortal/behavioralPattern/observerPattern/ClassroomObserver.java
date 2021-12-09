@@ -1,9 +1,13 @@
-package CS434.ExamPortal.observerPattern;
+package CS434.ExamPortal.behavioralPattern.observerPattern;
 
 import CS434.ExamPortal.DAO.Classroom;
+import CS434.ExamPortal.DAO.Notifications;
 import CS434.ExamPortal.Repositories.ClassroomRepository;
+import CS434.ExamPortal.Repositories.NotificationRepository;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 public class ClassroomObserver implements Observer{
     private Classroom classroom;
@@ -11,6 +15,8 @@ public class ClassroomObserver implements Observer{
     private UserRepositoryImpl userRepositoryImpl;
     @Autowired
     private ClassroomRepository classroomRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     public ClassroomObserver(Classroom classroom) {
         this.classroom = classroom;
@@ -28,6 +34,8 @@ public class ClassroomObserver implements Observer{
 
     @Override
     public void update(Classroom classroom, String announcementText) {
-
+        Notifications notifications = new Notifications();
+        notifications.setAnnouncementId(classroom.getId());
+        notificationRepository.save(notifications);
     }
 }

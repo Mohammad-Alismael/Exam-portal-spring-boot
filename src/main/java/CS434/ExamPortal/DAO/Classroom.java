@@ -39,4 +39,13 @@ public class Classroom {
     public void setStudentId(Integer studentId) {
         this.studentId = studentId;
     }
+
+    @Override
+    public String toString() {
+        return "Classroom{" +
+                "id=" + id +
+                ", instructorId=" + instructorId +
+                ", studentId=" + studentId +
+                '}';
+    }
 }

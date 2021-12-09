@@ -5,8 +5,9 @@ import CS434.ExamPortal.DAO.Users;
 import CS434.ExamPortal.Repositories.ClassroomRepository;
 import CS434.ExamPortal.Repositories.UserRepository;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
-import CS434.ExamPortal.observerPattern.ClassroomSubscriber;
-import CS434.ExamPortal.observerPattern.ClassroomObserver;
+import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
+import CS434.ExamPortal.behavioralPattern.observerPattern.ClassroomSubscriber;
+import CS434.ExamPortal.behavioralPattern.observerPattern.ClassroomObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,18 +29,23 @@ public class ClassroomController {
     @Autowired
     private UserRepository userRepository;
 
-    private ClassroomSubscriber classroomSubscriber = new ClassroomSubscriber();;
+    private ClassroomSubscriber classroomSubscriber = new ClassroomSubscriber();
 
 
     @PostMapping("/set-classroom-to-students")
     public ResponseStatusException setClassroomStudents(@RequestBody Classroom classroom) {
+        System.out.println(classroom);
+        NullUser user = userRepositoryImpl.findByUserId(classroom.getStudentId());
+        Classroom  classroom1 = classroomRepository
+                .findClassroomByInstructorIdAndStudentId(
+                        classroom.getInstructorId(),
+                        classroom.getStudentId());
+        if (user.isAvailable()) if (classroom1 == null) classroomRepository.save(classroom);
+
         classroomSubscriber.subscribe(new ClassroomObserver(classroom));
-//        NullUser user = userRepositoryImpl.findByUserId(classroom.getStudentId());
-//        if (!user.isAvailable()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"student id doesn't exists");
-//        classroomRepository.save(classroom);
+
         return new ResponseStatusException(HttpStatus.ACCEPTED);
     }
-
 
     @GetMapping("/get-class-students")
     public ArrayList<Users> getClassStudents(@RequestBody Classroom classroom) {
@@ -59,6 +65,14 @@ public class ClassroomController {
 
     @PostMapping("/delete-class-instructor")
     public RuntimeException deleteClassInstructor(@RequestBody Classroom classroom) {
+        NullUser user = userRepositoryImpl.findByUserId(classroom.getStudentId());
+        Classroom  classroom1 = classroomRepository
+                .findClassroomByInstructorIdAndStudentId(
+                        classroom.getInstructorId(),
+                        classroom.getStudentId());
+        if (!user.isAvailable()) if (classroom1 != null) classroomRepository.
+                removeByInstructorIdAndStudentId(classroom1.getInstructorId(),
+                        classroom1.getStudentId());
         classroomSubscriber.unsubscribe(new ClassroomObserver(classroom));
         return new ResponseStatusException(HttpStatus.GONE,"has been deleted successfully!");
     }

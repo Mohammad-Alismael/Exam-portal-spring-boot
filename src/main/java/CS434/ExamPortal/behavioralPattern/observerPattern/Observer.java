@@ -1,4 +1,4 @@
-package CS434.ExamPortal.observerPattern;
+package CS434.ExamPortal.behavioralPattern.observerPattern;
 
 import CS434.ExamPortal.DAO.Classroom;
 

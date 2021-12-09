@@ -56,6 +56,19 @@ public class UserRepositoryImpl implements UserRepository {
         return null;
     }
 
+    public NullUser findByUserIdv3(int userId) {
+        List query = em.createNativeQuery("SELECT * FROM Users WHERE user_id=(?)")
+                .setParameter(1, userId)
+                .getResultList();
+        Users user = (Users) query.get(0);
+        System.out.println(user);
+        if (user == null){
+            return NullUserObject.getInstance();
+        }else {
+            return  user;
+        }
+    }
+
     @Transactional
     @Override
     public void addUser(Users user) {
