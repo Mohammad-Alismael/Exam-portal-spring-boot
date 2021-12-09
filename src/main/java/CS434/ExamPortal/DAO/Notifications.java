@@ -5,7 +5,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "notifications")
 public class Notifications {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -16,6 +15,9 @@ public class Notifications {
 
     @Column(name = "seen")
     private Integer seen;
+
+    @Column(name = "student_id")
+    private Integer studentId;
 
     public Integer getId() {
         return this.id;
@@ -39,5 +41,13 @@ public class Notifications {
 
     public void setSeen(Integer seen) {
         this.seen = seen;
+    }
+
+    public Integer getStudentId() {
+        return this.studentId;
+    }
+
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
     }
 }

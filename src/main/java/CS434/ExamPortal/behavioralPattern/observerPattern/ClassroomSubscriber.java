@@ -2,6 +2,7 @@ package CS434.ExamPortal.behavioralPattern.observerPattern;
 
 import CS434.ExamPortal.DAO.Classroom;
 import CS434.ExamPortal.Repositories.ClassroomRepository;
+import CS434.ExamPortal.Repositories.NotificationRepository;
 import CS434.ExamPortal.Repositories.UserRepository;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
 import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
@@ -35,6 +36,8 @@ public class ClassroomSubscriber {
 
     private ClassroomRepository classroomRepository;
 
+    private NotificationRepository notificationRepository;
+
     private Integer InstructorId;
 
     @Autowired
@@ -45,6 +48,10 @@ public class ClassroomSubscriber {
     @Autowired
     public void setClassroomRepository(ClassroomRepository classroomRepository) {
         this.classroomRepository = classroomRepository;
+    }
+    @Autowired
+    public void setNotificationRepository(NotificationRepository notificationRepository) {
+        this.notificationRepository = notificationRepository;
     }
 
     public Integer getInstructorId() {
@@ -57,7 +64,9 @@ public class ClassroomSubscriber {
                 .findClassroomByInstructorId(instructorId);
         System.out.println(classrooms);
         for (Classroom classroom: classrooms){
-            observers.add(new ClassroomObserver(classroom));
+            ClassroomObserver classroomObserver = new ClassroomObserver(classroom);
+            classroomObserver.setNotificationRepository(notificationRepository);
+            observers.add(classroomObserver);
         }
     }
 
@@ -71,7 +80,7 @@ public class ClassroomSubscriber {
 
     }
 
-    public void notifySubscriber(String announcementText) {
+    public void notifySubscribers(String announcementText) {
         Iterator<?> it = observers.iterator();
         while (it.hasNext()) {
             Observer o = (Observer) it.next();

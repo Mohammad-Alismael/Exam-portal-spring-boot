@@ -1,21 +1,8 @@
-package CS434.ExamPortal.DAO;
+package CS434.ExamPortal.DTO;
 
-import org.springframework.context.annotation.Bean;
-
-import javax.persistence.*;
-
-@Entity
-@Table(name = "Classroom")
-public class Classroom {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+public class ClassroomDTO {
     private Integer id;
-
-    @Column(name = "instructor_id")
     private Integer instructorId;
-
-    @Column(name = "student_id")
     private Integer studentId;
 
     public Integer getId() {
@@ -40,14 +27,5 @@ public class Classroom {
 
     public void setStudentId(Integer studentId) {
         this.studentId = studentId;
-    }
-
-    @Override
-    public String toString() {
-        return "Classroom{" +
-                "id=" + id +
-                ", instructorId=" + instructorId +
-                ", studentId=" + studentId +
-                '}';
     }
 }

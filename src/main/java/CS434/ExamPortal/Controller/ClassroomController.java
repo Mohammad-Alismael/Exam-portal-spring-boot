@@ -3,6 +3,7 @@ package CS434.ExamPortal.Controller;
 import CS434.ExamPortal.DAO.Classroom;
 import CS434.ExamPortal.DAO.Users;
 import CS434.ExamPortal.Repositories.ClassroomRepository;
+import CS434.ExamPortal.Repositories.NotificationRepository;
 import CS434.ExamPortal.Repositories.UserRepository;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
 import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
@@ -28,6 +29,8 @@ public class ClassroomController {
     private UserRepositoryImpl userRepositoryImpl;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     private ClassroomSubscriber classroomSubscriber = new ClassroomSubscriber();
 
@@ -41,8 +44,9 @@ public class ClassroomController {
                         classroom.getInstructorId(),
                         classroom.getStudentId());
         if (user.isAvailable()) if (classroom1 == null) classroomRepository.save(classroom);
-
-        classroomSubscriber.subscribe(new ClassroomObserver(classroom));
+        ClassroomObserver classroomObserver = new ClassroomObserver(classroom);
+        classroomObserver.setNotificationRepository(notificationRepository);
+        classroomSubscriber.subscribe(classroomObserver);
 
         return new ResponseStatusException(HttpStatus.ACCEPTED);
     }
@@ -73,7 +77,9 @@ public class ClassroomController {
         if (!user.isAvailable()) if (classroom1 != null) classroomRepository.
                 removeByInstructorIdAndStudentId(classroom1.getInstructorId(),
                         classroom1.getStudentId());
-        classroomSubscriber.unsubscribe(new ClassroomObserver(classroom));
+        ClassroomObserver classroomObserver = new ClassroomObserver(classroom);
+        classroomObserver.setNotificationRepository(notificationRepository);
+        classroomSubscriber.unsubscribe(classroomObserver);
         return new ResponseStatusException(HttpStatus.GONE,"has been deleted successfully!");
     }
 

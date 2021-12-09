@@ -1,5 +1,6 @@
 package CS434.ExamPortal.RepositoriesImplement;
 
+import CS434.ExamPortal.DAO.Announcements;
 import CS434.ExamPortal.DAO.Users;
 import CS434.ExamPortal.Repositories.UserRepository;
 import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
@@ -221,5 +222,13 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public <S extends Users> boolean exists(Example<S> example) {
         return false;
+    }
+
+    public List<Announcements> listAnnouncementForStudents(Integer studentId){
+        System.out.println(studentId);
+        return em.createNativeQuery("select A.instructor_id,announcement_text,created_at " +
+                "from Classroom join Announcements A on Classroom.instructor_id = A.instructor_id where student_id = ?")
+                .setParameter(1, studentId)
+                .getResultList();
     }
 }
