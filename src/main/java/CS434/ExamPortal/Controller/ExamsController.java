@@ -1,11 +1,13 @@
 package CS434.ExamPortal.Controller;
 
 import CS434.ExamPortal.Classes.RandomUuidStringCreator;
+import CS434.ExamPortal.DAO.Classroom;
 import CS434.ExamPortal.DAO.Exams;
 import CS434.ExamPortal.DAO.Users;
 import CS434.ExamPortal.DTO.ExamsDTO;
 import CS434.ExamPortal.Repositories.ExamRepository;
 import CS434.ExamPortal.Repositories.UserRepository;
+import CS434.ExamPortal.RepositoriesImplement.ExamRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,8 @@ public class ExamsController {
 
     @Autowired
     private ExamRepository examRepository;
+    @Autowired
+    private ExamRepositoryImpl examRepositoryImpl;
     @Autowired
     private UserRepository userRepository;
 
@@ -85,5 +89,10 @@ public class ExamsController {
         examRepository.removeByCreatorIdAndExamId(exam.getCreatorId(), exam.getExamId());
         return  new ResponseStatusException(HttpStatus.ACCEPTED);
 
+    }
+    @GetMapping("/get-exam-id-student-id")
+    public List<Exams> getExamIdByStudentId(@RequestBody Classroom classroom) {
+
+        return examRepositoryImpl.listExamsbyStudentId(classroom.getStudentId());
     }
 }

@@ -10,6 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +20,8 @@ public class ExamRepositoryImpl implements ExamRepository {
 
     @Autowired
     private ExamRepository examRepository;
+    @PersistenceContext
+    public EntityManager em;
 
     @Override
     public List<Exams> findAllExams() {
@@ -196,5 +201,13 @@ public class ExamRepositoryImpl implements ExamRepository {
     @Override
     public <S extends Exams> boolean exists(Example<S> example) {
         return false;
+    }
+
+    public List<Exams> listExamsbyStudentId(Integer studentId){
+//        SELECT exam_id,title,score,starting_at,ending_at from Exams join Classroom on Exams.creator_id = Classroom.instructor_id where student_id= 15;
+        return em.createNativeQuery("SELECT exam_id,title,score,starting_at,ending_at from Exams " +
+                "join Classroom on Exams.creator_id = Classroom.instructor_id where student_id= ?")
+                .setParameter(1, studentId)
+                .getResultList();
     }
 }
