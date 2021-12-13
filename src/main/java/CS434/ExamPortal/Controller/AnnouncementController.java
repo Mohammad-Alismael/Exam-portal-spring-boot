@@ -10,10 +10,7 @@ import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
 import CS434.ExamPortal.behavioralPattern.observerPattern.ClassroomSubscriber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
@@ -41,9 +38,10 @@ public class AnnouncementController {
         classroomSubscriber.setClassroomRepository(classroomRepository);
         classroomSubscriber.setNotificationRepository(notificationRepository);
         announcement.setCreatedAt(new Date().getTime());
-        announcementRepository.save(announcement);
+        Announcements newAnnouncement = announcementRepository.save(announcement);
+        System.out.println();
         classroomSubscriber.setInstructorId(announcement.getInstructorId());
-        classroomSubscriber.notifySubscribers(announcement.getAnnouncementText());
+        classroomSubscriber.notifySubscribers(newAnnouncement.getId());
 
         return new ResponseStatusException(HttpStatus.ACCEPTED);
     }
@@ -51,6 +49,10 @@ public class AnnouncementController {
     @GetMapping("/get-announcement-instructor-id")
     public List<Announcements> getAnnouncement(@RequestBody Announcements announcement) {
         return announcementRepository.findByInstructorId(announcement.getInstructorId());
+    }
+    @GetMapping("/get-announcements")
+    public List<Announcements> getAnnouncement2(@RequestParam(required = false) Integer id) {
+        return announcementRepository.findByInstructorId(id);
     }
     @GetMapping("/get-announcement-student-id")
     public List<Announcements> getAnnouncementStudentId(@RequestBody Classroom user) {

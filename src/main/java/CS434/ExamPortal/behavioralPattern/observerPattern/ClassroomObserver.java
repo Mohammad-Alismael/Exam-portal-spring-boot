@@ -43,11 +43,10 @@ public class ClassroomObserver implements Observer{
 
 
     @Override
-    public void update(Classroom classroom, String announcementText) {
-        System.out.println(announcementText);
-        System.out.println(notificationRepository == null);
+    public void update(Classroom classroom, Integer announcementId) {
+
         Notifications notifications = new Notifications();
-        notifications.setAnnouncementId(classroom.getId());
+        notifications.setAnnouncementId(announcementId);
         notifications.setSeen(0);
         notifications.setStudentId(classroom.getStudentId());
         notificationRepository.save(notifications);

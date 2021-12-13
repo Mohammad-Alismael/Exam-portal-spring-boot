@@ -16,7 +16,7 @@ public class UserAnswer {
     private Integer questionId;
 
     @Column(name = "user_answer")
-    private String userAnswer;
+    private Integer userAnswer;
 
     @Column(name = "points")
     private Integer points;
@@ -51,11 +51,11 @@ public class UserAnswer {
         this.questionId = questionId;
     }
 
-    public String getUserAnswer() {
+    public Integer getUserAnswer() {
         return this.userAnswer;
     }
 
-    public void setUserAnswer(String userAnswer) {
+    public void setUserAnswer(Integer userAnswer) {
         this.userAnswer = userAnswer;
     }
 

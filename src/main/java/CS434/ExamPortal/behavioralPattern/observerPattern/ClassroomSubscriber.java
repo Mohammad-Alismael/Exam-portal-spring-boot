@@ -80,11 +80,11 @@ public class ClassroomSubscriber {
 
     }
 
-    public void notifySubscribers(String announcementText) {
+    public void notifySubscribers(Integer announcementId) {
         Iterator<?> it = observers.iterator();
         while (it.hasNext()) {
             Observer o = (Observer) it.next();
-            o.update(o.getClassroom(),announcementText);
+            o.update(o.getClassroom(),announcementId);
         }
     }
 
