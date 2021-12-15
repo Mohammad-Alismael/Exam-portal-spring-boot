@@ -50,5 +50,16 @@ public class UserController {
         }
 
     }
+    @PostMapping(path="/get-user-by-id")
+    public @ResponseBody Users getUserById(@RequestBody Users userInfo) {
+        NullUser users = userRepositoryImpl.findByUserId(userInfo.getUserId());
+        if (users.isAvailable()){
+//            userRepositoryImpl.addUser(userInfo);
+            return (Users) users;
+        }else {
+            return new Users();
+//            throw new ResponseStatusException(HttpStatus.CONFLICT, "username already taken");
+        }
+    }
 
 }

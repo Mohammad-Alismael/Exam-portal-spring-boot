@@ -51,7 +51,7 @@ public class ClassroomController {
         return new ResponseStatusException(HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/get-class-students")
+    @PostMapping("/get-class-students")
     public ArrayList<Users> getClassStudents(@RequestBody Classroom classroom) {
         List<Classroom> classrooms = classroomRepository.findClassroomByInstructorId(classroom.getInstructorId());
         ArrayList<Users> users = new ArrayList<>();
