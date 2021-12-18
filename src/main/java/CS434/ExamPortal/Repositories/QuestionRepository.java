@@ -19,8 +19,11 @@ public interface QuestionRepository extends JpaRepository<Questions,Integer> {
     List<Questions> findAllQuestions();
 
     List<Questions> findQuestionsByExamIdAndIsActiveAndCreatorExamId(String examId, Integer isActive, Integer creatorId);
+    @Query(value = "SELECT * from Questions where exam_id=:examId AND is_active = 1 ",nativeQuery = true)
+    List<Questions> findQuestionsByCreatorExamId(@Param("examId") String examId);
 
-    List<Questions> findQuestionsByCreatorExamIdAndIsActive(String examId, Integer isActive);
+
+    List<Questions> findQuestionsByCreatorExamIdAndIsActive(@Param("examId") String examId, Integer isActive);
 
     List<Questions> findQuestionsByExamIdAndQuestionTypeAndIsActive(String examId,Integer questionType, Integer isActive);
 

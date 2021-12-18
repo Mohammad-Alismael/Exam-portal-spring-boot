@@ -55,6 +55,11 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
+    public List<Questions> findQuestionsByCreatorExamId(String examId) {
+        return null;
+    }
+
+    @Override
     public List<Questions> findQuestionsByCreatorExamIdAndIsActive(String examId, Integer isActive) {
         return null;
     }

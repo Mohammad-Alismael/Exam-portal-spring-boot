@@ -20,7 +20,11 @@ public interface ExamRepository extends JpaRepository<Exams,String> {
     Exams findExamsByCreatorIdAndExamIdv2(@Param("creatorId") Integer creatorId,
                                           @Param("ExamId") String ExamId);
 
-    List<Exams> findExamsByCreatorId(Integer creatorId);
+    @Query(value = "SELECT * FROM Exams WHERE creator_id=:creatorId", nativeQuery = true)
+    List<Exams> findExamsByCreatorId(@Param("creatorId") Integer creatorId);
+
+    @Query(value = "SELECT * FROM Exams WHERE exam_id=:examId", nativeQuery = true)
+    Exams findExamsByExamId(@Param("examId") String examId);
 
     String deleteByCreatorIdAndExamId(Integer creatorId,String ExamId);
 

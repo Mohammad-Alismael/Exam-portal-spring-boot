@@ -44,7 +44,7 @@ public class UserController {
         NullUser users = userRepositoryImpl.findByUsername(userInfo.getUsername());
         if (!users.isAvailable()){
             userRepositoryImpl.addUser(userInfo);
-            return userInfo;
+            return (Users) userRepositoryImpl.findByUsername(userInfo.getUsername());
         }else {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "username already taken");
         }

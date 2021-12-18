@@ -28,8 +28,8 @@ public class OptionsController {
         if (question == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
         }
-
-        optionRepository.save(questionOptions);
+        if (question.getQuestionType() != 2)
+            optionRepository.save(questionOptions);
         return questionOptions;
     }
 

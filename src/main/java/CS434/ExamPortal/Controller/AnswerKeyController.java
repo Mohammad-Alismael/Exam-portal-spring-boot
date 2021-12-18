@@ -4,6 +4,7 @@ import CS434.ExamPortal.DAO.AnswerKey;
 import CS434.ExamPortal.DAO.Questions;
 import CS434.ExamPortal.Repositories.AnswerKeyRepository;
 import CS434.ExamPortal.Repositories.QuestionRepository;
+import CS434.ExamPortal.Repositories.QuestionRepository2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,38 +17,37 @@ public class AnswerKeyController {
     @Autowired
     private AnswerKeyRepository answerKeyRepository;
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuestionRepository2 questionRepository2;
 
-    @GetMapping(path="/set-answer-key")
+    @PostMapping(path="/set-answer-key")
     public @ResponseBody
     AnswerKey setAnswerKey(@RequestBody AnswerKey answerKey) {
-        Questions question = (Questions) questionRepository.findByQuestionId(answerKey.getQuestionId());
-
-        if (question == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
+        Questions question =  questionRepository2.findByQuestionId(answerKey.getQuestionId());
+        AnswerKey answerKey1 = answerKeyRepository.findAnswerKeyByQuestionId(answerKey.getQuestionId());
+        if (question != null && answerKey1 == null){
+            answerKeyRepository.save(answerKey);
         }
-
-        answerKeyRepository.save(answerKey);
         return answerKey;
     }
 
     @PostMapping(path="/get-answer-key")
     public @ResponseBody
     AnswerKey getAnswerKey(@RequestBody AnswerKey answerKey) {
-//        Questions question = questionRepository.findByQuestionId(answerKey.getQuestionId());
 
-//        if (question == null){
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
-//        }
+        AnswerKey answerKey1 = answerKeyRepository.findAnswerKeyByQuestionId(answerKey.getQuestionId());
+        if (answerKey1 == null){
+            return new AnswerKey();
+        }else {
+            return answerKey1;
+        }
 
-        return answerKeyRepository.findAnswerKeyByQuestionId(answerKey.getQuestionId());
 
     }
 
     @PostMapping(path="/update-answer-key")
     public @ResponseBody
     ResponseStatusException updateAnswerKey(@RequestBody AnswerKey answerKey) {
-        Questions question = (Questions) questionRepository.findByQuestionId(answerKey.getQuestionId());
+        Questions question = questionRepository2.findByQuestionId(answerKey.getQuestionId());
 
         AnswerKey currentAnswerKey = answerKeyRepository.findAnswerKeyById(answerKey.getId());
         if (currentAnswerKey == null){
@@ -63,7 +63,7 @@ public class AnswerKeyController {
     @PostMapping(path="/delete-answer-key")
     public @ResponseBody
     ResponseStatusException deleteAnswerKey(@RequestBody AnswerKey answerKey) {
-        Questions question = (Questions) questionRepository.findByQuestionId(answerKey.getQuestionId());
+        Questions question =  questionRepository2.findByQuestionId(answerKey.getQuestionId());
 
         AnswerKey currentAnswerKey = answerKeyRepository.findAnswerKeyById(answerKey.getId());
         if (currentAnswerKey == null){

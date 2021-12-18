@@ -6,8 +6,11 @@ import CS434.ExamPortal.DAO.Exams;
 import CS434.ExamPortal.DAO.Users;
 import CS434.ExamPortal.DTO.ExamsDTO;
 import CS434.ExamPortal.Repositories.ExamRepository;
+import CS434.ExamPortal.Repositories.ExamRepository2;
 import CS434.ExamPortal.Repositories.UserRepository;
 import CS434.ExamPortal.RepositoriesImplement.ExamRepositoryImpl;
+import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
+import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +27,13 @@ public class ExamsController {
     @Autowired
     private ExamRepository examRepository;
     @Autowired
+    private ExamRepository2 examRepository2;
+    @Autowired
     private ExamRepositoryImpl examRepositoryImpl;
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private UserRepositoryImpl userRepositoryImpl;
     @GetMapping("/list-all-exams")
     public List<Exams> listAllExams() {
         return examRepository.findAllExams();
@@ -40,8 +46,8 @@ public class ExamsController {
 
     @PostMapping("/add-exam")
     public Exams addExam(@RequestBody Exams exam) {
-        Users user = userRepository.findByUserIdv2(exam.getCreatorId());
-        if (user == null){
+        NullUser user = userRepositoryImpl.findByUserId(exam.getCreatorId());
+        if (!user.isAvailable()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user doesn't exist");
         }
         if (user.getRoleId() != 1){
@@ -51,7 +57,7 @@ public class ExamsController {
         exam.setStartingAt(exam.getStartingAt());
         exam.setEndingAt(exam.getEndingAt());
         exam.setCreatedAt(new Date().getTime());
-        examRepository.save(exam);
+        examRepository2.save(exam);
         return exam;
 
     }
@@ -90,9 +96,13 @@ public class ExamsController {
         return  new ResponseStatusException(HttpStatus.ACCEPTED);
 
     }
-    @GetMapping("/get-exam-id-student-id")
+    @PostMapping("/get-exam-id-student-id")
     public List<Exams> getExamIdByStudentId(@RequestBody Classroom classroom) {
-
         return examRepositoryImpl.listExamsbyStudentId(classroom.getStudentId());
+    }
+
+    @PostMapping("/get-exam-id-info")
+    public Exams getExamInfo(@RequestBody Exams exam) {
+        return examRepository.findExamsByExamId(exam.getExamId());
     }
 }

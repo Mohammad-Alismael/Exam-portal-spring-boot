@@ -3,10 +3,7 @@ package CS434.ExamPortal.Controller;
 import CS434.ExamPortal.DAO.Exams;
 import CS434.ExamPortal.DAO.Questions;
 import CS434.ExamPortal.DAO.Users;
-import CS434.ExamPortal.Repositories.ExamRepository;
-import CS434.ExamPortal.Repositories.OptionRepository;
-import CS434.ExamPortal.Repositories.QuestionRepository;
-import CS434.ExamPortal.Repositories.UserRepository;
+import CS434.ExamPortal.Repositories.*;
 import CS434.ExamPortal.RepositoriesImplement.ExamRepositoryImpl;
 import CS434.ExamPortal.RepositoriesImplement.QuestionRepositoryImpl;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
@@ -28,6 +25,8 @@ public class QuestionsController {
     @Autowired
     private QuestionRepository questionRepository;
     @Autowired
+    private QuestionRepository2 questionRepository2;
+    @Autowired
     private QuestionRepositoryImpl questionRepositoryImpl;
     @Autowired
     private UserRepository userRepository;
@@ -43,7 +42,7 @@ public class QuestionsController {
 
     @PostMapping(path="/add-question")
     public @ResponseBody
-    ResponseStatusException storeQuestion (@RequestBody Questions question) {
+    INullObject storeQuestion (@RequestBody Questions question) {
        NullUser user = userRepositoryImpl.findByUserId(question.getCreatorExamId());
         if (!user.isAvailable()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user doesn't exist");
@@ -57,11 +56,16 @@ public class QuestionsController {
                         question.getCreatorExamId(),
                         question.getExamId()
                         );
-       if (!exam.isAvailable())  throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "exam id doesn't exists");
-
-        questionRepositoryImpl.addQuestion(question);
-
-       return  new ResponseStatusException(HttpStatus.CREATED,"created successfully!");
+//       if (!exam.isAvailable())  throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "exam id doesn't exists");
+        if (!exam.isAvailable()) System.out.println("exam id doesn't exists");
+//        questionRepositoryImpl.addQuestion(question);
+        Questions currentQuestion = questionRepository2.findByExamIdAndQuestionText(
+                question.getExamId(),
+                question.getQuestionText());
+        if (currentQuestion == null)
+            questionRepository2.save(question);
+//       return  new ResponseStatusException(HttpStatus.CREATED,"created successfully!");
+        return question;
 
     }
 
@@ -101,11 +105,11 @@ public class QuestionsController {
 
     }
 
-    @GetMapping (path="/list-questions")
+    @PostMapping (path="/list-questions")
     public @ResponseBody
     List<Questions> listQuestions (@RequestBody Exams exam) {
         String examId = exam.getExamId();
-        return  questionRepository.findQuestionsByCreatorExamIdAndIsActive(examId,1);
+        return  questionRepository.findQuestionsByCreatorExamId(examId);
     }
 
 

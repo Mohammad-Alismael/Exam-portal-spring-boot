@@ -42,7 +42,22 @@ public class ExamRepositoryImpl implements ExamRepository {
             return exam;
         }
     }
+    public Exams addExam(Exams exam){
+        em.createNativeQuery("INSERT INTO Exams " +
+                "(exam_id, title,score,creator_id,starting_at,ending_at,created_at) " +
+                "VALUES (?,?,?,?,?,?,?)")
+                .setParameter(1, exam.getExamId())
+                .setParameter(2, exam.getTitle())
+                .setParameter(3, exam.getScore())
+                .setParameter(4, exam.getCreatorId())
+                .setParameter(5, exam.getStartingAt())
+                .setParameter(6, exam.getEndingAt())
+                .setParameter(7, exam.getCreatedAt())
+                .executeUpdate();
 
+
+        return exam;
+    }
     @Override
     public Exams findExamsByCreatorIdAndExamIdv2(Integer creatorId, String ExamId) {
         return null;
@@ -50,6 +65,11 @@ public class ExamRepositoryImpl implements ExamRepository {
 
     @Override
     public List<Exams> findExamsByCreatorId(Integer creatorId) {
+        return null;
+    }
+
+    @Override
+    public Exams findExamsByExamId(String examId) {
         return null;
     }
 
