@@ -41,6 +41,18 @@ public class AnswerKeyController {
             return answerKey1;
         }
 
+    }
+
+    @PostMapping(path="/get-answer-key-multiple")
+    public @ResponseBody
+    Object getAnswerKeyMultiple(@RequestBody AnswerKey answerKey) {
+
+        List<AnswerKey> answerKey1 = (List<AnswerKey>) answerKeyRepository.findAnswerKeyByQuestionId(answerKey.getQuestionId());
+        if (answerKey1 == null){
+            return (List<AnswerKey>) new AnswerKey();
+        }else {
+            return answerKeyRepository.findAnswerKeyByQuestionId(answerKey.getQuestionId());
+        }
 
     }
 
