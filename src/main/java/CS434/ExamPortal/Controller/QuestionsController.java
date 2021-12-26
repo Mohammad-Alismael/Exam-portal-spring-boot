@@ -9,10 +9,11 @@ import CS434.ExamPortal.RepositoriesImplement.QuestionRepositoryImpl;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
 import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
 import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
-import CS434.ExamPortal.behavioralPattern.nullObject.NullUserObject;
+import CS434.ExamPortal.structuralPattern.compositePattern.Question;
+import CS434.ExamPortal.structuralPattern.compositePattern.QuestionComponent;
+import CS434.ExamPortal.structuralPattern.compositePattern.QuestionGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -112,22 +113,29 @@ public class QuestionsController {
         return  questionRepository.findQuestionsByCreatorExamId(examId);
     }
 
-
-
-    @GetMapping (path="/list-questions-randomly")
+    @PostMapping (path="/list-questions-randomly")
     public @ResponseBody
-    ArrayList<Questions> listQuestionsRandomly (@RequestBody Exams exam) {
+    ArrayList<Object> listQuestionsRandomly (@RequestBody Questions exam) {
         String examId = exam.getExamId();
-        List<Questions> a = questionRepository.
-                findQuestionsByExamIdAndIsActive(examId,1);
-        ArrayList<Questions> randomQuestions = new ArrayList<>() ;
+        List<Questions> a = questionRepository2.
+                findQuestionsByExamIdForStudents(examId,exam.getWhoCanSee());
+
+        ArrayList<Object> randomQuestions = new ArrayList<>() ;
         Random random = new Random();
+
+        QuestionComponent questionGroup = new QuestionGroup();
+        for(Questions question: a){
+            Question q = new Question( question);
+            q.setOptionRepository(optionRepository);
+            questionGroup.add(q);
+        }
         for (int i = 0; i <a.size() ; i++) {
             int randomNumber = 0 + random.nextInt(a.size());
-            randomQuestions.add(a.get(randomNumber));
+            randomQuestions.add(questionGroup.getQuestion(randomNumber));
         }
 
         return randomQuestions;
+
     }
 
     @PostMapping (path="/list-question-by-id")

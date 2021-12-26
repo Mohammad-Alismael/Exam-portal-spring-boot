@@ -1,7 +1,9 @@
 package CS434.ExamPortal.DTO;
 
 import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
+import org.springframework.stereotype.Service;
 
+@Service
 public class QuestionsDTO implements INullObject {
     private Integer questionId;
     private Integer questionType;

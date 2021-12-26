@@ -1,9 +1,10 @@
 package CS434.ExamPortal.DAO;
 
 import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
-
+@Service
 @Entity
 @Table(name = "Questions")
 public class Questions implements INullObject {

@@ -54,7 +54,7 @@ public class AnnouncementController {
     public List<Announcements> getAnnouncement2(@RequestParam(required = false) Integer id) {
         return announcementRepository.findByInstructorId(id);
     }
-    @GetMapping("/get-announcement-student-id")
+    @PostMapping("/get-announcement-student-id")
     public List<Announcements> getAnnouncementStudentId(@RequestBody Classroom user) {
 
         return userRepositoryImpl.listAnnouncementForStudents(user.getStudentId());

@@ -62,6 +62,11 @@ public class ClassroomController {
         return users;
     }
 
+    @PostMapping("/get-instructor-id-from-student-id")
+    public Classroom getInstructorId(@RequestBody Classroom classroom){
+        return classroomRepository.findClassroomByStudentId(classroom.getStudentId());
+    }
+
     @GetMapping("/get-class-instructor")
     public List<Classroom> getClassInstructor(@RequestBody Classroom classroom) {
         return classroomRepository.findClassroomByInstructorId(classroom.getInstructorId());

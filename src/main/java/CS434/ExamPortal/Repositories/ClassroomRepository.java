@@ -18,6 +18,8 @@ public interface ClassroomRepository extends JpaRepository<Classroom,Integer> {
 
     Classroom findClassroomByInstructorIdAndStudentId(Integer instructorID, Integer studentId);
 
+    Classroom findClassroomByStudentId(Integer studentId);
+
     @Query(value = "select username,email_id from Users join Classroom C on Users.user_id = C.student_id where instructor_id=:instructorID;",
             nativeQuery = true)
     List<Users> listStudentsUsernamesByInstructorId(@Param("instructorID") Integer instructorID);
