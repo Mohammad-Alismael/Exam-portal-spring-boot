@@ -1,7 +1,6 @@
 package CS434.ExamPortal.Controller;
 
 import CS434.ExamPortal.DAO.UserAnswer;
-import CS434.ExamPortal.DAO.Users;
 import CS434.ExamPortal.Repositories.UserAnswerRepository;
 import CS434.ExamPortal.Repositories.UserRepository;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
@@ -11,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -37,28 +37,33 @@ public class UserAnswerController {
         if (!currentUser.isAvailable()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
         }
+        userAnswer.setAnsweredAt(new Date().getTime());
+        List<UserAnswer> userAnswer1 = userAnswerRepository.
+                findUserAnswerByUserIdAndQuestionId(
+                        userAnswer.getUserId(),
+                        userAnswer.getQuestionId());
+         if (userAnswer1.size() == 0) userAnswerRepository.save(userAnswer);
+        userAnswerRepository.save(userAnswer);
 
-         userAnswerRepository.save(userAnswer);
-
-        return  new ResponseStatusException(HttpStatus.GONE);
+        return new ResponseStatusException(HttpStatus.GONE);
     }
 
     @PostMapping(path="/update-user-answer")
     public @ResponseBody
     ResponseStatusException updateUserAnswer(@RequestBody UserAnswer userAnswer) {
-        NullUser currentUser = userRepositoryImpl.findByUserId(userAnswer.getUserId());
-
-        UserAnswer currentUserAnswer = userAnswerRepository
-                .findUserAnswerByUserIdAndQuestionId(
-                        userAnswer.getUserId(),
-                        userAnswer.getQuestionId()
-                );
-
-        if (!currentUser.isAvailable()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
-        }
-        currentUserAnswer.setUserAnswer(userAnswer.getUserAnswer());
-        userAnswerRepository.save(currentUserAnswer);
+//        NullUser currentUser = userRepositoryImpl.findByUserId(userAnswer.getUserId());
+//
+//        UserAnswer currentUserAnswer = userAnswerRepository
+//                .findUserAnswerByUserIdAndQuestionIdv2(
+//                        userAnswer.getUserId(),
+//                        userAnswer.getQuestionId()
+//                );
+//
+//        if (!currentUser.isAvailable()){
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
+//        }
+//        currentUserAnswer.setUserAnswer(userAnswer.getUserAnswer());
+//        userAnswerRepository.save(currentUserAnswer);
 
         return  new ResponseStatusException(HttpStatus.GONE);
     }

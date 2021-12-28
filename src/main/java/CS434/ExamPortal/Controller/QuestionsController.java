@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -129,10 +130,21 @@ public class QuestionsController {
             q.setOptionRepository(optionRepository);
             questionGroup.add(q);
         }
-        for (int i = 0; i <a.size() ; i++) {
-            int randomNumber = 0 + random.nextInt(a.size());
-            randomQuestions.add(questionGroup.getQuestion(randomNumber));
+
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for (int i=0; i<a.size(); i++) {
+            list.add(i);
         }
+        Collections.shuffle(list);
+        for (int i=0; i<a.size(); i++) {
+            randomQuestions.add(questionGroup.getQuestion(i));
+
+        }
+
+//        for (int i = 0; i <a.size() ; i++) {
+//            int randomNumber = 0 + random.nextInt(a.size());
+//            randomQuestions.add(questionGroup.getQuestion(randomNumber));
+//        }
 
         return randomQuestions;
 
