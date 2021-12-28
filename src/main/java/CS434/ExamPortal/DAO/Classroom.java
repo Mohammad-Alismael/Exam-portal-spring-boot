@@ -1,7 +1,5 @@
 package CS434.ExamPortal.DAO;
 
-import org.springframework.context.annotation.Bean;
-
 import javax.persistence.*;
 
 @Entity
@@ -14,9 +12,6 @@ public class Classroom {
 
     @Column(name = "instructor_id")
     private Integer instructorId;
-
-    @Column(name = "student_id")
-    private Integer studentId;
 
     public Integer getId() {
         return this.id;
@@ -32,22 +27,5 @@ public class Classroom {
 
     public void setInstructorId(Integer instructorId) {
         this.instructorId = instructorId;
-    }
-
-    public Integer getStudentId() {
-        return this.studentId;
-    }
-
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
-    }
-
-    @Override
-    public String toString() {
-        return "Classroom{" +
-                "id=" + id +
-                ", instructorId=" + instructorId +
-                ", studentId=" + studentId +
-                '}';
     }
 }

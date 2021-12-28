@@ -2,6 +2,7 @@ package CS434.ExamPortal.Controller;
 
 import CS434.ExamPortal.Classes.RandomUuidStringCreator;
 import CS434.ExamPortal.DAO.Classroom;
+import CS434.ExamPortal.DAO.ClassroomStudent;
 import CS434.ExamPortal.DAO.Exams;
 import CS434.ExamPortal.DAO.Users;
 import CS434.ExamPortal.DTO.ExamsDTO;
@@ -97,7 +98,7 @@ public class ExamsController {
 
     }
     @PostMapping("/get-exam-id-student-id")
-    public List<Exams> getExamIdByStudentId(@RequestBody Classroom classroom) {
+    public List<Exams> getExamIdByStudentId(@RequestBody ClassroomStudent classroom) {
         return examRepositoryImpl.listExamsbyStudentId(classroom.getStudentId());
     }
 

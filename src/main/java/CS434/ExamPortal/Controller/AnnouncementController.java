@@ -2,6 +2,7 @@ package CS434.ExamPortal.Controller;
 
 import CS434.ExamPortal.DAO.Announcements;
 import CS434.ExamPortal.DAO.Classroom;
+import CS434.ExamPortal.DAO.ClassroomStudent;
 import CS434.ExamPortal.Repositories.AnnouncementRepository;
 import CS434.ExamPortal.Repositories.ClassroomRepository;
 import CS434.ExamPortal.Repositories.NotificationRepository;
@@ -55,7 +56,7 @@ public class AnnouncementController {
         return announcementRepository.findByInstructorId(id);
     }
     @PostMapping("/get-announcement-student-id")
-    public List<Announcements> getAnnouncementStudentId(@RequestBody Classroom user) {
+    public List<Announcements> getAnnouncementStudentId(@RequestBody ClassroomStudent user) {
 
         return userRepositoryImpl.listAnnouncementForStudents(user.getStudentId());
     }
