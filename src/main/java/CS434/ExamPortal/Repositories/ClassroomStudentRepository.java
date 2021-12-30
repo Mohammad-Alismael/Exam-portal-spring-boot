@@ -8,4 +8,6 @@ import java.util.List;
 public interface ClassroomStudentRepository extends JpaRepository<ClassroomStudent,Integer> {
     List<ClassroomStudent> findClassroomStudentByClassroomId(Integer classroomId);
     ClassroomStudent findByStudentId(Integer studentId);
+    List<ClassroomStudent> findClassroomStudentByStudentId(Integer studentId);
+    ClassroomStudent findClassroomStudentByStudentIdAndClassroomId(Integer studentId,Integer classroomId);
 }

@@ -223,11 +223,14 @@ public class ExamRepositoryImpl implements ExamRepository {
         return false;
     }
 
-    public List<Exams> listExamsbyStudentId(Integer studentId){
+    public List<Exams> listExamsbyStudentId(Integer studentId,Integer classroomId){
 //        SELECT exam_id,title,score,starting_at,ending_at from Exams join Classroom on Exams.creator_id = Classroom.instructor_id where student_id= 15;
-        return em.createNativeQuery("SELECT exam_id,title,score,starting_at,ending_at from Exams " +
-                "join Classroom on Exams.creator_id = Classroom.instructor_id where student_id= ?")
+        return em.createNativeQuery("SELECT exam_id,title,score,starting_at,ending_at from Exams\n" +
+                "    where creator_id = ( SELECT distinct instructor_id\n" +
+                "    from Classroom join classroom_student cs on Classroom.id\n" +
+                "    = cs.classroom_id where student_id= ? and classroom_id= ?)")
                 .setParameter(1, studentId)
+                .setParameter(2, classroomId)
                 .getResultList();
     }
 }

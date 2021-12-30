@@ -99,7 +99,8 @@ public class ExamsController {
     }
     @PostMapping("/get-exam-id-student-id")
     public List<Exams> getExamIdByStudentId(@RequestBody ClassroomStudent classroom) {
-        return examRepositoryImpl.listExamsbyStudentId(classroom.getStudentId());
+        System.out.println(classroom.getStudentId());
+        return examRepositoryImpl.listExamsbyStudentId(classroom.getStudentId(), classroom.getClassroomId());
     }
 
     @PostMapping("/get-exam-id-info")

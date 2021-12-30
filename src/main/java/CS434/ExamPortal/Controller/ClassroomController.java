@@ -10,14 +10,11 @@ import CS434.ExamPortal.Repositories.UserRepository;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
 import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
 import CS434.ExamPortal.behavioralPattern.observerPattern.ClassroomSubscriber;
-import CS434.ExamPortal.behavioralPattern.observerPattern.ClassroomObserver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,16 +65,15 @@ public class ClassroomController {
 
     @PostMapping("/get-instructor-id-from-student-id")
     public Classroom getInstructorId(@RequestBody ClassroomStudent classroom){
-        ClassroomStudent classroomStudent = classroomStudentRepository.findByStudentId(classroom.getStudentId());
-        Classroom room = classroomRepository.findClassroomById(classroomStudent.getClassroomId());
+
+        Classroom room = classroomRepository.findClassroomById(classroom.getClassroomId());
         return room;
     }
 
     @PostMapping("/get-class-students-from-student-id")
     public ArrayList<Users> getClassInstructor(@RequestBody ClassroomStudent classroom) {
-        ClassroomStudent classroomStudent = classroomStudentRepository.findByStudentId(classroom.getStudentId());
         List<ClassroomStudent> classroomStudents = classroomStudentRepository
-                .findClassroomStudentByClassroomId(classroomStudent.getClassroomId());
+                .findClassroomStudentByClassroomId(classroom.getClassroomId());
         ArrayList<Users> users = new ArrayList<>();
         for (ClassroomStudent classroom1 : classroomStudents){
             Users u = userRepository.findByUserIdv2(classroom1.getStudentId());
@@ -103,7 +99,12 @@ public class ClassroomController {
         if (classroomStudent == null) classroomStudentRepository.save(classroom);
         return classroom;
     }
-
+    @PostMapping("/get-classroom-ids-from-student-id")
+    public List<ClassroomStudent> getClassIdFromStudent(@RequestBody ClassroomStudent classroom) {
+        List<ClassroomStudent> classroomStudents = classroomStudentRepository
+                .findClassroomStudentByStudentId(classroom.getStudentId());
+        return  classroomStudents;
+    }
 //    @PostMapping("/delete-class-instructor")
 //    public RuntimeException deleteClassInstructor(@RequestBody Classroom classroom) {
 //        NullUser user = userRepositoryImpl.findByUserId(classroom.getStudentId());

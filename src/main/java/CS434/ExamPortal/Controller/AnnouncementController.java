@@ -3,10 +3,7 @@ package CS434.ExamPortal.Controller;
 import CS434.ExamPortal.DAO.Announcements;
 import CS434.ExamPortal.DAO.Classroom;
 import CS434.ExamPortal.DAO.ClassroomStudent;
-import CS434.ExamPortal.Repositories.AnnouncementRepository;
-import CS434.ExamPortal.Repositories.ClassroomRepository;
-import CS434.ExamPortal.Repositories.NotificationRepository;
-import CS434.ExamPortal.Repositories.UserRepository;
+import CS434.ExamPortal.Repositories.*;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
 import CS434.ExamPortal.behavioralPattern.observerPattern.ClassroomSubscriber;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +26,8 @@ public class AnnouncementController {
     private AnnouncementRepository announcementRepository;
     @Autowired
     private NotificationRepository notificationRepository;
+    @Autowired
+    private ClassroomStudentRepository classroomStudentRepository;
 
     private ClassroomSubscriber classroomSubscriber = new ClassroomSubscriber();
 
@@ -57,8 +56,8 @@ public class AnnouncementController {
     }
     @PostMapping("/get-announcement-student-id")
     public List<Announcements> getAnnouncementStudentId(@RequestBody ClassroomStudent user) {
-
-        return userRepositoryImpl.listAnnouncementForStudents(user.getStudentId());
+        Classroom classroomStudent = classroomRepository.findClassroomById(user.getClassroomId());
+        return announcementRepository.findByInstructorId(classroomStudent.getInstructorId());
     }
     @GetMapping("/get-announcements-all")
     public List<Announcements> getAnnouncement() {
