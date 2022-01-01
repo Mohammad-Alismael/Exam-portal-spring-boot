@@ -87,15 +87,13 @@ public class ExamsController {
     }
 
     @PostMapping("/delete-exam")
-    public ResponseStatusException deleteExam(@RequestBody ExamsDTO exam) {
+    public ExamsDTO deleteExam(@RequestBody ExamsDTO exam) {
+
         Users user = userRepository.findByUserIdv2(exam.getCreatorId());
-        if (user.getRoleId() != 1){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
+        if (user.getRoleId() == 1){
+            examRepository2.removeByCreatorIdAndExamId(exam.getCreatorId(), exam.getExamId());
         }
-
-        examRepository.removeByCreatorIdAndExamId(exam.getCreatorId(), exam.getExamId());
-        return  new ResponseStatusException(HttpStatus.ACCEPTED);
-
+        return exam;
     }
     @PostMapping("/get-exam-id-student-id")
     public List<Exams> getExamIdByStudentId(@RequestBody ClassroomStudent classroom) {

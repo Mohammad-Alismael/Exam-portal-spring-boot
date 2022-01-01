@@ -50,6 +50,13 @@ public class UserController {
         }
 
     }
+
+    @PostMapping(path="/get-user-info-by-username") // Map ONLY POST Requests
+    public @ResponseBody
+    Users getUserInfoByUsername (@RequestBody Users userInfo) {
+        return userRepository.findByUsernamev2(userInfo.getUsername());
+    }
+
     @PostMapping(path="/get-user-by-id")
     public @ResponseBody Users getUserById(@RequestBody Users userInfo) {
         NullUser users = userRepositoryImpl.findByUserId(userInfo.getUserId());

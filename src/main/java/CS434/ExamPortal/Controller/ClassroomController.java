@@ -49,6 +49,14 @@ public class ClassroomController {
         return classroom;
     }
 
+    @PostMapping("/set-classroom-to-students-v2")
+    public ClassroomStudent setClassroomStudentsv2(@RequestBody ClassroomStudent classroom) {
+        Classroom  classroom1 = classroomRepository
+                .findClassroomById(classroom.getClassroomId());
+         if (classroom1 == null) classroomStudentRepository.save(classroom);
+        return classroom;
+    }
+
     @PostMapping("/get-class-students-from-instructor")
     public ArrayList<Users> getClassStudents(@RequestBody Classroom classroom) {
         Classroom room = classroomRepository.findClassroomByInstructorId(classroom.getInstructorId());
@@ -68,6 +76,17 @@ public class ClassroomController {
 
         Classroom room = classroomRepository.findClassroomById(classroom.getClassroomId());
         return room;
+    }
+
+    @PostMapping("/get-classroom-id-by-instructor-id")
+    public Classroom getClassroomIdByInstructorId(@RequestBody Classroom classroom){
+        Classroom room = classroomRepository.findClassroomByInstructorId(classroom.getInstructorId());
+        if (room == null){
+            return new Classroom();
+        }else {
+            return room;
+        }
+
     }
 
     @PostMapping("/get-class-students-from-student-id")
