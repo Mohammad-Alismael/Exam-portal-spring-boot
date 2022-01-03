@@ -40,7 +40,8 @@ public class QuestionsController {
     private ExamRepositoryImpl examRepositoryImpl;
     @Autowired
     private OptionRepository optionRepository;
-
+    @Autowired
+    private AnswerKeyRepository answerKeyRepository;
 
     @PostMapping(path="/add-question")
     public @ResponseBody
@@ -109,34 +110,43 @@ public class QuestionsController {
 
     @PostMapping (path="/list-questions")
     public @ResponseBody
-    List<Questions> listQuestions (@RequestBody Exams exam) {
+    ArrayList<Question> listQuestions (@RequestBody Exams exam) {
         String examId = exam.getExamId();
-        return  questionRepository.findQuestionsByCreatorExamId(examId);
+        List<Questions> questions = questionRepository.findQuestionsByCreatorExamId(examId);
+        QuestionComponent questionGroup = new QuestionGroup();
+        for(Questions question: questions){
+            Question q = new Question( question);
+            q.setOptionRepository(optionRepository);
+            q.setAnswerKeyRepository(answerKeyRepository);
+            questionGroup.add(q);
+        }
+        return  ((QuestionGroup) questionGroup).getQuestions();
     }
 
     @PostMapping (path="/list-questions-randomly")
     public @ResponseBody
     ArrayList<Object> listQuestionsRandomly (@RequestBody Questions exam) {
         String examId = exam.getExamId();
-        List<Questions> a = questionRepository2.
+        List<Questions> questions = questionRepository2.
                 findQuestionsByExamIdForStudents(examId,exam.getWhoCanSee());
 
         ArrayList<Object> randomQuestions = new ArrayList<>() ;
         Random random = new Random();
 
         QuestionComponent questionGroup = new QuestionGroup();
-        for(Questions question: a){
+        for(Questions question: questions){
             Question q = new Question( question);
             q.setOptionRepository(optionRepository);
+            q.setAnswerKeyRepository(answerKeyRepository);
             questionGroup.add(q);
         }
 
         ArrayList<Integer> list = new ArrayList<Integer>();
-        for (int i=0; i<a.size(); i++) {
+        for (int i=0; i<questions.size(); i++) {
             list.add(i);
         }
         Collections.shuffle(list);
-        for (int i=0; i<a.size(); i++) {
+        for (int i=0; i<questions.size(); i++) {
             randomQuestions.add(questionGroup.getQuestion(i));
 
         }

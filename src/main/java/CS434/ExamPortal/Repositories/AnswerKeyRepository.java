@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface AnswerKeyRepository extends JpaRepository<AnswerKey,Integer> {
     AnswerKey findAnswerKeyByQuestionId(Integer questionId);
+    List<AnswerKey> findByQuestionId(Integer questionId);
     AnswerKey findAnswerKeyById(Integer id);
     @Transactional
     void removeById(Integer id);
