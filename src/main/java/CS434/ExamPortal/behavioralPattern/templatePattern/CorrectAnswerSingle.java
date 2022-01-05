@@ -11,34 +11,50 @@ public class CorrectAnswerSingle extends CorrectAnswer{
     protected Boolean isCorrect = false;
     protected AnswerKey correctAnswer;
     protected UserAnswer userAnswer;
+
+    public Boolean getCorrect() {
+        return isCorrect;
+    }
+
+    public void setCorrect(Boolean correct) {
+        isCorrect = correct;
+    }
+
     @Override
     void fetchCorrectAnswer() {
+        System.out.println("fetching correctAnswer..");
         correctAnswer =  answerKeyRepository.findAnswerKeyByQuestionId(questionsDTO.getQuestionId());
+        System.out.println(correctAnswer);
     }
 
     @Override
     void fetchUserAnswer() {
-        userAnswer = userAnswerRepository.findUserAnswerByIdV2(questionsDTO.getAnswerId());
+        System.out.println("fetching userAnswer..");
+        userAnswer = userAnswerRepository.findUserAnswerById(questionsDTO.getAnswerId()).get(0);
+        System.out.println(userAnswer);
     }
 
     @Override
     void checkUserAnswer() {
+        System.out.println("checking user answer");
         isCorrect = userAnswer.getUserAnswer() == correctAnswer.getCorrectAnswer();
+        System.out.println(isCorrect);
+
     }
 
     @Override
     void updateScore() {
         UserAnswer newUserAnswer  = userAnswer;
         if (isCorrect){
-
             newUserAnswer.setIsCorrect(1);
-            Questions answeredQuestion = questionRepositoryImpl
-                    .findByQusId(questionsDTO.getQuestionId());
+            Questions answeredQuestion = questionRepository
+                    .findByQuestionId(questionsDTO.getQuestionId());
             newUserAnswer.setPoints(answeredQuestion.getPoints());
-            questionRepositoryImpl.save(answeredQuestion);
         }else {
             newUserAnswer.setIsCorrect(0);
             newUserAnswer.setPoints(0);
         }
+        userAnswerRepository.save(newUserAnswer);
+        System.out.println(newUserAnswer);
     }
 }

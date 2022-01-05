@@ -207,28 +207,34 @@ public class QuestionsController {
     @PostMapping (path="/list-exam-result")
     public @ResponseBody
     ArrayList<QuestionsDTO> listExamResult(@RequestBody Exams exam) {
-        // creatorId = userId = studentId
+        // creatorId = userId = studentId = WhoCanSee
         ArrayList<QuestionsDTO> questions = questionRepositoryImpl.
                 getUserAnswers(exam.getCreatorId(),exam.getExamId());
+
         CorrectAnswer correctAnswerSingle = new CorrectAnswerSingle();
         correctAnswerSingle.setUserAnswerRepository(userAnswerRepository);
         correctAnswerSingle.setAnswerKeyRepository(answerKeyRepository);
-        correctAnswerSingle.setQuestionRepositoryImpl(questionRepositoryImpl);
+        correctAnswerSingle.setQuestionRepository(questionRepository2);
         CorrectAnswer correctAnswerMultiple = new CorrectAnswerMultiple();
         correctAnswerMultiple.setUserAnswerRepository(userAnswerRepository);
         correctAnswerMultiple.setAnswerKeyRepository(answerKeyRepository);
-        correctAnswerMultiple.setQuestionRepositoryImpl(questionRepositoryImpl);
+        correctAnswerMultiple.setQuestionRepository(questionRepository2);;
 
         Chain single = new SingleAnswerChain();
         Chain multiple = new MultipleAnswerChain();
         single.setNextChain(multiple);
-
+//
         for (QuestionsDTO q : questions){
+            correctAnswerSingle.setQuestionsDTO(q);
+            correctAnswerMultiple.setQuestionsDTO(q);
+            correctAnswerSingle.correctingAnswer();
             single.setCorrectAnswer(correctAnswerSingle);
             multiple.setCorrectAnswer(correctAnswerMultiple);
+            q.setWhoCanSee(exam.getCreatorId());
             if (q.getQuestionType() != 2){
                 single.getFinalResult(q);
             }
+
         }
         return questions;
     }

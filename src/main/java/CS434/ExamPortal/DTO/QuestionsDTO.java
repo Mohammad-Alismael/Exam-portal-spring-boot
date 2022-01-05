@@ -18,6 +18,8 @@ public class QuestionsDTO implements INullObject {
     private Integer whoCanSee;
     private Integer userAnswer;
     private Integer answerId;
+    private Integer isCorrect;
+    private Integer correctAnswer;
 
     public Integer getQuestionId() {
         return this.questionId;
@@ -102,5 +104,21 @@ public class QuestionsDTO implements INullObject {
 
     public void setAnswerId(Integer answerId) {
         this.answerId = answerId;
+    }
+
+    public Integer getIsCorrect() {
+        return isCorrect;
+    }
+
+    public void setIsCorrect(Integer isCorrect) {
+        this.isCorrect = isCorrect;
+    }
+
+    public Integer getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public void setCorrectAnswer(Integer correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
 }

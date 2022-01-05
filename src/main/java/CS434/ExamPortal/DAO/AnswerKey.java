@@ -39,4 +39,13 @@ public class AnswerKey {
     public void setCorrectAnswer(Integer correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
+
+    @Override
+    public String toString() {
+        return "AnswerKey{" +
+                "id=" + id +
+                ", questionId=" + questionId +
+                ", correctAnswer=" + correctAnswer +
+                '}';
+    }
 }

@@ -39,7 +39,7 @@ public class UserAnswerController {
         }
         userAnswer.setAnsweredAt(new Date().getTime());
         UserAnswer userAnswer1 = userAnswerRepository.
-                findUserAnswerByUserIdAndQuestionId(
+                findUserAnswerByUserIdAndQuestionIdSingle(
                         userAnswer.getUserId(),
                         userAnswer.getQuestionId());
          if (userAnswer1 == null) userAnswerRepository.save(userAnswer);

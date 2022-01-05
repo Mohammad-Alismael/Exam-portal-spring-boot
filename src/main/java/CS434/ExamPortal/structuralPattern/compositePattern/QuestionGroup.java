@@ -7,7 +7,6 @@ import CS434.ExamPortal.DTO.QuestionsDTO;
 import java.util.ArrayList;
 import java.util.List;
 
-// song component is question DTO
 public class QuestionGroup implements QuestionComponent{
 
     ArrayList<Question> questions = new ArrayList();

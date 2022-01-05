@@ -22,22 +22,25 @@ public class CorrectAnswerMultiple extends CorrectAnswer{
 
     @Override
     void fetchUserAnswer() {
-        userAnswer = userAnswerRepository.findUserAnswerById(questionsDTO.getAnswerId());
+        userAnswer = userAnswerRepository.findUserAnswerByUserIdAndQuestionId(
+                questionsDTO.getWhoCanSee(),
+                questionsDTO.getQuestionId());
     }
 
     @Override
     void checkUserAnswer() {
+        isCorrect.clear();
         for (int i = 0; i < userAnswer.size(); i++) {
             if (userAnswer.get(i).getUserAnswer() != -1) {
-                isCorrect.add(
-                        correctAnswer.get(i).getCorrectAnswer() == userAnswer.get(i).getUserAnswer()
-                );
+                boolean isItCorrect = correctAnswer.get(i).getCorrectAnswer() == userAnswer.get(i).getUserAnswer();
+                isCorrect.add(isItCorrect);
             }
         }
     }
 
     @Override
     void updateScore() {
+
         for (int i = 0; i < isCorrect.size(); i++) {
             if (isCorrect.get(i)){
                 userAnswer.get(i).setIsCorrect(1);
@@ -46,6 +49,7 @@ public class CorrectAnswerMultiple extends CorrectAnswer{
                 userAnswer.get(i).setIsCorrect(0);
                 userAnswer.get(i).setPoints(0);
             }
+            userAnswerRepository.save(userAnswer.get(i));
         }
 
     }

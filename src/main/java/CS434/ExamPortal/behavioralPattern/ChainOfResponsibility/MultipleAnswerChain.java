@@ -4,9 +4,12 @@ import CS434.ExamPortal.DAO.Questions;
 import CS434.ExamPortal.DTO.QuestionsDTO;
 import CS434.ExamPortal.behavioralPattern.templatePattern.CorrectAnswer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MultipleAnswerChain implements Chain{
     private Chain nextInChain;
+    @Autowired
     CorrectAnswer correctAnswer;
 
     @Override

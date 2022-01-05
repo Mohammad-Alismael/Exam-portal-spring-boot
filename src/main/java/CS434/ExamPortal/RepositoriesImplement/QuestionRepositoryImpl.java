@@ -252,7 +252,6 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         while(itr.hasNext()){
             Object[] obj = (Object[]) itr.next();
             QuestionsDTO questionsDTO = new QuestionsDTO();
-            //now you have one array of Object for each row
             Integer answerId = Integer.parseInt(String.valueOf(obj[0]));
             questionsDTO.setAnswerId(answerId);
             Integer questionId = Integer.parseInt(String.valueOf(obj[1]));
@@ -261,8 +260,6 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             questionsDTO.setQuestionType(questionType);
             Integer userAnswer  = Integer.parseInt(String.valueOf(obj[3] == null ? "-1" : obj[3]));
             questionsDTO.setUserAnswer(userAnswer);
-            //same way for all obj[2], obj[3], obj[4]
-//            System.out.println(client);
             System.out.println("answerId=> "+answerId);
             System.out.println("questionId=> "+questionId);
             System.out.println("questionType=> "+questionType);
@@ -270,7 +267,44 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             questionsDTOS.add(questionsDTO);
         }
 
+        return questionsDTOS;
+    }
+
+    public ArrayList<QuestionsDTO> getResult(Integer studentId, String examId){
+        List resultList = em.createNativeQuery("select distinct U.question_id,Q.question_type,U.user_answer,U.is_correct,U.points,AK.correct_answer " +
+                "from User_answer U\n" +
+                "    join Questions Q on Q.question_id = U.question_id\n" +
+                "    join Exams E on E.exam_id = Q.exam_id\n" +
+                "    join Answer_key Ak on Q.question_id = Ak.question_id\n" +
+                "where user_id = ? and E.exam_id = ?")
+                .setParameter(1, studentId)
+                .setParameter(2, examId)
+                .getResultList();
+        ArrayList<QuestionsDTO> questionsDTOS = new ArrayList<>();
+        Iterator itr = resultList.iterator();
+        while(itr.hasNext()){
+            Object[] obj = (Object[]) itr.next();
+            QuestionsDTO questionsDTO = new QuestionsDTO();
+            Integer questionId = Integer.parseInt(String.valueOf(obj[0]));
+            questionsDTO.setQuestionId(questionId);
+            Integer questionType = Integer.parseInt(String.valueOf(obj[1]));
+            questionsDTO.setQuestionType(questionType);
+            Integer userAnswer  = Integer.parseInt(String.valueOf(obj[2] == null ? "-1" : obj[3]));
+            questionsDTO.setUserAnswer(userAnswer);
+            Integer isCorrect  = Integer.parseInt(String.valueOf(obj[3]));
+            questionsDTO.setIsCorrect(isCorrect);
+            questionsDTO.setUserAnswer(userAnswer);
+            Integer points = Integer.parseInt(String.valueOf(obj[4]));
+            questionsDTO.setPoints(points);
+            Integer correctAnswer = Integer.parseInt(String.valueOf(obj[5]));
+            questionsDTO.setCorrectAnswer(correctAnswer);
+            System.out.println("questionId=> "+questionId);
+            System.out.println("questionType=> "+questionType);
+            System.out.println("userAnswer=> "+userAnswer);
+            questionsDTOS.add(questionsDTO);
+        }
 
         return questionsDTOS;
     }
+
 }

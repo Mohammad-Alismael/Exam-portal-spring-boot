@@ -83,4 +83,17 @@ public class UserAnswer {
     public void setAnsweredAt(long answeredAt) {
         this.answeredAt = answeredAt;
     }
+
+    @Override
+    public String toString() {
+        return "UserAnswer{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", questionId=" + questionId +
+                ", userAnswer=" + userAnswer +
+                ", points=" + points +
+                ", isCorrect=" + isCorrect +
+                ", answeredAt=" + answeredAt +
+                '}';
+    }
 }
