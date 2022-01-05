@@ -242,7 +242,6 @@ public class ExamRepositoryImpl implements ExamRepository {
                 .setParameter(1, examId)
                 .setParameter(2, studentId)
                 .getResultList();
-        System.out.println(questions);
         return questions.size() != 0;
     }
 }

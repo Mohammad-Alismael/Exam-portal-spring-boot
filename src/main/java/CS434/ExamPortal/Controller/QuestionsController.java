@@ -3,12 +3,19 @@ package CS434.ExamPortal.Controller;
 import CS434.ExamPortal.DAO.Exams;
 import CS434.ExamPortal.DAO.Questions;
 import CS434.ExamPortal.DAO.Users;
+import CS434.ExamPortal.DTO.QuestionsDTO;
 import CS434.ExamPortal.Repositories.*;
 import CS434.ExamPortal.RepositoriesImplement.ExamRepositoryImpl;
 import CS434.ExamPortal.RepositoriesImplement.QuestionRepositoryImpl;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
+import CS434.ExamPortal.behavioralPattern.ChainOfResponsibility.Chain;
+import CS434.ExamPortal.behavioralPattern.ChainOfResponsibility.MultipleAnswerChain;
+import CS434.ExamPortal.behavioralPattern.ChainOfResponsibility.SingleAnswerChain;
 import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
 import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
+import CS434.ExamPortal.behavioralPattern.templatePattern.CorrectAnswer;
+import CS434.ExamPortal.behavioralPattern.templatePattern.CorrectAnswerMultiple;
+import CS434.ExamPortal.behavioralPattern.templatePattern.CorrectAnswerSingle;
 import CS434.ExamPortal.structuralPattern.compositePattern.Question;
 import CS434.ExamPortal.structuralPattern.compositePattern.QuestionComponent;
 import CS434.ExamPortal.structuralPattern.compositePattern.QuestionGroup;
@@ -42,6 +49,8 @@ public class QuestionsController {
     private OptionRepository optionRepository;
     @Autowired
     private AnswerKeyRepository answerKeyRepository;
+    @Autowired
+    private UserAnswerRepository userAnswerRepository;
 
     @PostMapping(path="/add-question")
     public @ResponseBody
@@ -151,10 +160,6 @@ public class QuestionsController {
 
         }
 
-//        for (int i = 0; i <a.size() ; i++) {
-//            int randomNumber = 0 + random.nextInt(a.size());
-//            randomQuestions.add(questionGroup.getQuestion(randomNumber));
-//        }
 
         return randomQuestions;
 
@@ -199,5 +204,33 @@ public class QuestionsController {
                         1);
     }
 
+    @PostMapping (path="/list-exam-result")
+    public @ResponseBody
+    ArrayList<QuestionsDTO> listExamResult(@RequestBody Exams exam) {
+        // creatorId = userId = studentId
+        ArrayList<QuestionsDTO> questions = questionRepositoryImpl.
+                getUserAnswers(exam.getCreatorId(),exam.getExamId());
+        CorrectAnswer correctAnswerSingle = new CorrectAnswerSingle();
+        correctAnswerSingle.setUserAnswerRepository(userAnswerRepository);
+        correctAnswerSingle.setAnswerKeyRepository(answerKeyRepository);
+        correctAnswerSingle.setQuestionRepositoryImpl(questionRepositoryImpl);
+        CorrectAnswer correctAnswerMultiple = new CorrectAnswerMultiple();
+        correctAnswerMultiple.setUserAnswerRepository(userAnswerRepository);
+        correctAnswerMultiple.setAnswerKeyRepository(answerKeyRepository);
+        correctAnswerMultiple.setQuestionRepositoryImpl(questionRepositoryImpl);
+
+        Chain single = new SingleAnswerChain();
+        Chain multiple = new MultipleAnswerChain();
+        single.setNextChain(multiple);
+
+        for (QuestionsDTO q : questions){
+            single.setCorrectAnswer(correctAnswerSingle);
+            multiple.setCorrectAnswer(correctAnswerMultiple);
+            if (q.getQuestionType() != 2){
+                single.getFinalResult(q);
+            }
+        }
+        return questions;
+    }
 
 }

@@ -3,6 +3,9 @@ package CS434.ExamPortal.DTO;
 import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Entity;
+
+
 @Service
 public class QuestionsDTO implements INullObject {
     private Integer questionId;
@@ -13,6 +16,8 @@ public class QuestionsDTO implements INullObject {
     private String examId;
     private Integer isActive;
     private Integer whoCanSee;
+    private Integer userAnswer;
+    private Integer answerId;
 
     public Integer getQuestionId() {
         return this.questionId;
@@ -81,5 +86,21 @@ public class QuestionsDTO implements INullObject {
     @Override
     public boolean isAvailable() {
         return true;
+    }
+
+    public Integer getUserAnswer() {
+        return userAnswer;
+    }
+
+    public void setUserAnswer(Integer userAnswer) {
+        this.userAnswer = userAnswer;
+    }
+
+    public Integer getAnswerId() {
+        return answerId;
+    }
+
+    public void setAnswerId(Integer answerId) {
+        this.answerId = answerId;
     }
 }

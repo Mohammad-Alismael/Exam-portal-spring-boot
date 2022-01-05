@@ -3,6 +3,7 @@ package CS434.ExamPortal.behavioralPattern.observerPattern;
 import CS434.ExamPortal.DAO.Classroom;
 import CS434.ExamPortal.DAO.ClassroomStudent;
 import CS434.ExamPortal.Repositories.ClassroomRepository;
+import CS434.ExamPortal.Repositories.ClassroomStudentRepository;
 import CS434.ExamPortal.Repositories.NotificationRepository;
 import CS434.ExamPortal.Repositories.UserRepository;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
@@ -30,14 +31,14 @@ import java.util.Map;
 @Configurable
 public class ClassroomSubscriber {
     private ArrayList<Observer> observers = new ArrayList<Observer>();
-    @Autowired
-    private UserRepositoryImpl userRepositoryImpl;
 
     private UserRepository userRepository;
 
     private ClassroomRepository classroomRepository;
 
     private NotificationRepository notificationRepository;
+
+    private ClassroomStudentRepository classroomStudentRepository;
 
     private Integer InstructorId;
 
@@ -54,22 +55,25 @@ public class ClassroomSubscriber {
     public void setNotificationRepository(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
     }
+    @Autowired
+    public void setClassroomStudentRepository(ClassroomStudentRepository classroomStudentRepository) {
+        this.classroomStudentRepository = classroomStudentRepository;
+    }
 
     public Integer getInstructorId() {
         return InstructorId;
     }
 
     public void setInstructorId(Integer instructorId) {
-//        System.out.println(userRepository.findByUserIdv2(instructorId));
-//        Classroom room = classroomRepository
-//                .findClassroomByInstructorId(instructorId);
-//        List<ClassroomStudent> classrooms = classroomStudentRepository
-//                .findClassroomStudentByClassroomId(room.getId());
-//        for (ClassroomStudent classroom: classrooms){
-//            ClassroomObserver classroomObserver = new ClassroomObserver(classroom);
-//            classroomObserver.setNotificationRepository(notificationRepository);
-//            observers.add(classroomObserver);
-//        }
+        Classroom room = classroomRepository
+                .findClassroomByInstructorId(instructorId);
+        List<ClassroomStudent> classrooms = classroomStudentRepository
+                .findClassroomStudentByClassroomId(room.getId());
+        for (ClassroomStudent classroom: classrooms){
+            ClassroomObserver classroomObserver = new ClassroomObserver(classroom);
+            classroomObserver.setNotificationRepository(notificationRepository);
+            observers.add(classroomObserver);
+        }
     }
 
     public void subscribe(Observer classroomObserver) {
@@ -83,11 +87,11 @@ public class ClassroomSubscriber {
     }
 
     public void notifySubscribers(Integer announcementId) {
-//        Iterator<?> it = observers.iterator();
-//        while (it.hasNext()) {
-//            Observer o = (Observer) it.next();
-//            o.update(o.getClassroom(),announcementId);
-//        }
+        Iterator<?> it = observers.iterator();
+        while (it.hasNext()) {
+            Observer o = (Observer) it.next();
+            o.update(o.getClassroom(),announcementId);
+        }
     }
 
 }

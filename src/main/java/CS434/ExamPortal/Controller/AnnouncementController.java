@@ -39,7 +39,7 @@ public class AnnouncementController {
         classroomSubscriber.setNotificationRepository(notificationRepository);
         announcement.setCreatedAt(new Date().getTime());
         Announcements newAnnouncement = announcementRepository.save(announcement);
-        System.out.println();
+
         classroomSubscriber.setInstructorId(announcement.getInstructorId());
         classroomSubscriber.notifySubscribers(newAnnouncement.getId());
 

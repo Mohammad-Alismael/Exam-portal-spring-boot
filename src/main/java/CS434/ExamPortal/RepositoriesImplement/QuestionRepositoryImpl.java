@@ -1,10 +1,13 @@
 package CS434.ExamPortal.RepositoriesImplement;
 
+import CS434.ExamPortal.DAO.Exams;
 import CS434.ExamPortal.DAO.Questions;
+import CS434.ExamPortal.DTO.QuestionsDTO;
 import CS434.ExamPortal.Repositories.QuestionRepository;
 import CS434.ExamPortal.Repositories.UserRepository;
 import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
 import CS434.ExamPortal.behavioralPattern.nullObject.NullObject;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -14,8 +17,8 @@ import org.springframework.data.domain.Sort;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class QuestionRepositoryImpl implements QuestionRepository {
 
@@ -234,5 +237,40 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     @Override
     public <S extends Questions> boolean exists(Example<S> example) {
         return false;
+    }
+
+    public ArrayList<QuestionsDTO> getUserAnswers(Integer studentId, String examId){
+        List resultList = em.createNativeQuery("select distinct U.id,U.question_id,Q.question_type,U.user_answer from User_answer U\n" +
+                "    join Questions Q on Q.question_id = U.question_id\n" +
+                "    join Exams E on E.exam_id = Q.exam_id\n" +
+                "where user_id = ? and E.exam_id = ?")
+                .setParameter(1, studentId)
+                .setParameter(2, examId)
+                .getResultList();
+        ArrayList<QuestionsDTO> questionsDTOS = new ArrayList<>();
+        Iterator itr = resultList.iterator();
+        while(itr.hasNext()){
+            Object[] obj = (Object[]) itr.next();
+            QuestionsDTO questionsDTO = new QuestionsDTO();
+            //now you have one array of Object for each row
+            Integer answerId = Integer.parseInt(String.valueOf(obj[0]));
+            questionsDTO.setAnswerId(answerId);
+            Integer questionId = Integer.parseInt(String.valueOf(obj[1]));
+            questionsDTO.setQuestionId(questionId);
+            Integer questionType = Integer.parseInt(String.valueOf(obj[2]));
+            questionsDTO.setQuestionType(questionType);
+            Integer userAnswer  = Integer.parseInt(String.valueOf(obj[3] == null ? "-1" : obj[3]));
+            questionsDTO.setUserAnswer(userAnswer);
+            //same way for all obj[2], obj[3], obj[4]
+//            System.out.println(client);
+            System.out.println("answerId=> "+answerId);
+            System.out.println("questionId=> "+questionId);
+            System.out.println("questionType=> "+questionType);
+            System.out.println("userAnswer=> "+userAnswer);
+            questionsDTOS.add(questionsDTO);
+        }
+
+
+        return questionsDTOS;
     }
 }

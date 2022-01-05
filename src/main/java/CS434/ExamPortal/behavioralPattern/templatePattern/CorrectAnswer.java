@@ -1,6 +1,8 @@
 package CS434.ExamPortal.behavioralPattern.templatePattern;
 
+import CS434.ExamPortal.DAO.AnswerKey;
 import CS434.ExamPortal.DAO.UserAnswer;
+import CS434.ExamPortal.DTO.QuestionsDTO;
 import CS434.ExamPortal.Repositories.AnswerKeyRepository;
 import CS434.ExamPortal.Repositories.UserAnswerRepository;
 import CS434.ExamPortal.RepositoriesImplement.QuestionRepositoryImpl;
@@ -9,23 +11,25 @@ import org.springframework.stereotype.Service;
 
 @Service
 public abstract class CorrectAnswer {
-    protected UserAnswer userAnswer;
+    protected QuestionsDTO questionsDTO;
     protected AnswerKeyRepository answerKeyRepository;
     protected UserAnswerRepository userAnswerRepository;
     protected QuestionRepositoryImpl questionRepositoryImpl;
     public final void correctingAnswer(){
         fetchCorrectAnswer();
+        fetchUserAnswer();
         checkUserAnswer();
         updateScore();
     }
 
-    public UserAnswer getUserAnswer() {
-        return userAnswer;
+    public QuestionsDTO getQuestionsDTO() {
+        return questionsDTO;
     }
 
-    public void setUserAnswer(UserAnswer userAnswer) {
-        this.userAnswer = userAnswer;
+    public void setQuestionsDTO(QuestionsDTO questionsDTO) {
+        this.questionsDTO = questionsDTO;
     }
+
     @Autowired
     public void setAnswerKeyRepository(AnswerKeyRepository answerKeyRepository) {
         this.answerKeyRepository = answerKeyRepository;
@@ -40,6 +44,7 @@ public abstract class CorrectAnswer {
     }
 
     abstract void fetchCorrectAnswer();
+    abstract void fetchUserAnswer();
     abstract void checkUserAnswer();
     abstract void updateScore();
 }
