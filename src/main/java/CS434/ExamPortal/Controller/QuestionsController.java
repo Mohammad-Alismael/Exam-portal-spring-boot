@@ -75,7 +75,7 @@ public class QuestionsController {
 
     @PostMapping(path="/update-question") // Map ONLY POST Requests
     public @ResponseBody
-    ResponseStatusException updateQuestion (@RequestBody Questions question) {
+    Questions updateQuestion (@RequestBody Questions question) {
         Users user = userRepository.findByUserIdv2(question.getCreatorExamId());
         if (user.getRoleId() != 1){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
@@ -86,14 +86,14 @@ public class QuestionsController {
         quest.setPoints(question.getPoints());
         quest.setWhoCanSee(question.getWhoCanSee());
         // the rest
-        questionRepositoryImpl.addQuestion(quest);
-        return  new ResponseStatusException(HttpStatus.ACCEPTED);
+        questionRepository2.save(quest);
+        return quest;
 
     }
 
     @PostMapping(path="/delete-question")
     public @ResponseBody
-    ResponseStatusException deleteQuestion (@RequestBody Questions question) {
+    Questions deleteQuestion (@RequestBody Questions question) {
         Users user = userRepository.findByUserIdv2(question.getCreatorExamId());
         if (user.getRoleId() != 1){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
@@ -104,7 +104,7 @@ public class QuestionsController {
         }
         quest.setIsActive(0);
         questionRepository.save(quest);
-        return  new ResponseStatusException(HttpStatus.ACCEPTED);
+        return  quest;
 
     }
 

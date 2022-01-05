@@ -36,16 +36,15 @@ public class OptionsController {
     @PostMapping (path="/update-question-options")
     public @ResponseBody
     QuestionOptions updateOptions(@RequestBody QuestionOptions questionOptions) {
-        Questions question = (Questions) questionRepository.findByQuestionId(questionOptions.getQuestionId());
-        List<QuestionOptions> currentQ = optionRepository
-                .findQuestionOptionsByQuestionId(questionOptions.getQuestionId());
-        if (question == null){
+        // one by one
+        QuestionOptions Q = optionRepository.findQuestionOptionsById(questionOptions.getId());
+        if (Q.getQuestionId() == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
         }
-        currentQ.get(0).setOptionValue(questionOptions.getOptionValue());
 
-        optionRepository.save(currentQ.get(0));
-        return questionOptions;
+        Q.setOptionValue(questionOptions.getOptionValue());
+        optionRepository.save(Q);
+        return Q;
     }
 
     @PostMapping (path="/get-question-options")

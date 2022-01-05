@@ -9,7 +9,7 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer,Integer> 
 
     List<UserAnswer> findUserAnswerByUserId(Integer userId);
 
-    List<UserAnswer> findUserAnswerByUserIdAndQuestionId(Integer userId,Integer questionId);
+    UserAnswer findUserAnswerByUserIdAndQuestionId(Integer userId,Integer questionId);
 
 //    UserAnswer findUserAnswerByUserIdAndQuestionId(Integer userId,Integer questionId);
 

@@ -1,10 +1,7 @@
 package CS434.ExamPortal.Controller;
 
 import CS434.ExamPortal.Classes.RandomUuidStringCreator;
-import CS434.ExamPortal.DAO.Classroom;
-import CS434.ExamPortal.DAO.ClassroomStudent;
-import CS434.ExamPortal.DAO.Exams;
-import CS434.ExamPortal.DAO.Users;
+import CS434.ExamPortal.DAO.*;
 import CS434.ExamPortal.DTO.ExamsDTO;
 import CS434.ExamPortal.Repositories.ExamRepository;
 import CS434.ExamPortal.Repositories.ExamRepository2;
@@ -17,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -64,7 +59,7 @@ public class ExamsController {
     }
 
     @PostMapping("/update-exam")
-    public ResponseStatusException updateExam(@RequestBody Exams newExam) {
+    public Exams updateExam(@RequestBody Exams newExam) {
         Users user = userRepository.findByUserIdv2(newExam.getCreatorId());
         if (user.getRoleId() != 1){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you have no permission!");
@@ -80,10 +75,10 @@ public class ExamsController {
             currentExam.setStartingAt(newExam.getStartingAt());
         }
         if (newExam.getEndingAt() != 0){
-            currentExam.setStartingAt(newExam.getStartingAt());
+            currentExam.setEndingAt(newExam.getEndingAt());
         }
         examRepository.save(currentExam);
-        return  new ResponseStatusException(HttpStatus.ACCEPTED);
+        return currentExam;
     }
 
     @PostMapping("/delete-exam")
@@ -104,5 +99,12 @@ public class ExamsController {
     @PostMapping("/get-exam-id-info")
     public Exams getExamInfo(@RequestBody Exams exam) {
         return examRepository.findExamsByExamId(exam.getExamId());
+    }
+
+    @PostMapping("/check-submission")
+    public boolean checkSubmission(@RequestBody Exams exam){
+        // using creator id as user id in this endpoint
+//        Questions questions = examRepository2.checkExamSubmission(exam.getCreatorId(), exam.getExamId());
+        return examRepositoryImpl.checkExamSubmission(exam.getCreatorId(), exam.getExamId());
     }
 }

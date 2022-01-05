@@ -1,6 +1,7 @@
 package CS434.ExamPortal.RepositoriesImplement;
 
 import CS434.ExamPortal.DAO.Exams;
+import CS434.ExamPortal.DAO.Questions;
 import CS434.ExamPortal.Repositories.ExamRepository;
 import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
 import CS434.ExamPortal.behavioralPattern.nullObject.NullObject;
@@ -232,5 +233,16 @@ public class ExamRepositoryImpl implements ExamRepository {
                 .setParameter(1, studentId)
                 .setParameter(2, classroomId)
                 .getResultList();
+    }
+    public boolean checkExamSubmission(Integer studentId,String examId){
+        List<Exams> questions = em.createNativeQuery("select question_id from User_answer\n" +
+                "where exists(select question_id from Questions\n" +
+                "where exam_id= ?)\n" +
+                "and user_id = ?")
+                .setParameter(1, examId)
+                .setParameter(2, studentId)
+                .getResultList();
+        System.out.println(questions);
+        return questions.size() != 0;
     }
 }

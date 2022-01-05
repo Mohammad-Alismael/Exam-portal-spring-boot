@@ -11,6 +11,7 @@ public interface OptionRepository extends JpaRepository<QuestionOptions,Integer>
 
     List<QuestionOptions> findQuestionOptionsByQuestionId(Integer questionId);
     void removeByQuestionIdAndOptionValue(Integer questionId,String option);
+    QuestionOptions findQuestionOptionsById(Integer id);
     @Transactional
     void removeById(Integer id);
 

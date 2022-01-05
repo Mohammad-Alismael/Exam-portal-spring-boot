@@ -32,20 +32,19 @@ public class UserAnswerController {
 
     @PostMapping(path="/set-user-answer")
     public @ResponseBody
-    ResponseStatusException postUserAnswer(@RequestBody UserAnswer userAnswer) {
+    UserAnswer postUserAnswer(@RequestBody UserAnswer userAnswer) {
         NullUser currentUser = userRepositoryImpl.findByUserId(userAnswer.getUserId());
         if (!currentUser.isAvailable()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
         }
         userAnswer.setAnsweredAt(new Date().getTime());
-        List<UserAnswer> userAnswer1 = userAnswerRepository.
+        UserAnswer userAnswer1 = userAnswerRepository.
                 findUserAnswerByUserIdAndQuestionId(
                         userAnswer.getUserId(),
                         userAnswer.getQuestionId());
-         if (userAnswer1.size() == 0) userAnswerRepository.save(userAnswer);
-        userAnswerRepository.save(userAnswer);
+         if (userAnswer1 == null) userAnswerRepository.save(userAnswer);
 
-        return new ResponseStatusException(HttpStatus.GONE);
+        return userAnswer1;
     }
 
     @PostMapping(path="/update-user-answer")

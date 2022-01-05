@@ -58,25 +58,21 @@ public class AnswerKeyController {
 
     @PostMapping(path="/update-answer-key")
     public @ResponseBody
-    ResponseStatusException updateAnswerKey(@RequestBody AnswerKey answerKey) {
-        Questions question = questionRepository2.findByQuestionId(answerKey.getQuestionId());
-
+    AnswerKey updateAnswerKey(@RequestBody AnswerKey answerKey) {
         AnswerKey currentAnswerKey = answerKeyRepository.findAnswerKeyById(answerKey.getId());
         if (currentAnswerKey == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
+        }else {
+            currentAnswerKey.setCorrectAnswer(answerKey.getCorrectAnswer());
+            answerKeyRepository.save(currentAnswerKey);
+            return answerKey;
         }
-        currentAnswerKey.setCorrectAnswer(answerKey.getCorrectAnswer());
-
-        answerKeyRepository.save(currentAnswerKey);
-
-        return  new ResponseStatusException(HttpStatus.ACCEPTED);
     }
 
     @PostMapping(path="/delete-answer-key")
     public @ResponseBody
     ResponseStatusException deleteAnswerKey(@RequestBody AnswerKey answerKey) {
         Questions question =  questionRepository2.findByQuestionId(answerKey.getQuestionId());
-
         AnswerKey currentAnswerKey = answerKeyRepository.findAnswerKeyById(answerKey.getId());
         if (currentAnswerKey == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "question id doesn't exists!");
