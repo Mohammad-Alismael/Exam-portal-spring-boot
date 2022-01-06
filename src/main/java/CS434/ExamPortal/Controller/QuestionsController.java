@@ -8,9 +8,9 @@ import CS434.ExamPortal.Repositories.*;
 import CS434.ExamPortal.RepositoriesImplement.ExamRepositoryImpl;
 import CS434.ExamPortal.RepositoriesImplement.QuestionRepositoryImpl;
 import CS434.ExamPortal.RepositoriesImplement.UserRepositoryImpl;
-import CS434.ExamPortal.behavioralPattern.ChainOfResponsibility.Chain;
-import CS434.ExamPortal.behavioralPattern.ChainOfResponsibility.MultipleAnswerChain;
-import CS434.ExamPortal.behavioralPattern.ChainOfResponsibility.SingleAnswerChain;
+//import CS434.ExamPortal.behavioralPattern.ChainOfResponsibility.Chain;
+//import CS434.ExamPortal.behavioralPattern.ChainOfResponsibility.MultipleAnswerChain;
+//import CS434.ExamPortal.behavioralPattern.ChainOfResponsibility.SingleAnswerChain;
 import CS434.ExamPortal.behavioralPattern.nullObject.INullObject;
 import CS434.ExamPortal.behavioralPattern.nullObject.NullUser;
 import CS434.ExamPortal.behavioralPattern.templatePattern.CorrectAnswer;
@@ -206,7 +206,7 @@ public class QuestionsController {
 
     @PostMapping (path="/list-exam-result")
     public @ResponseBody
-    ArrayList<QuestionsDTO> listExamResult(@RequestBody Exams exam) {
+    ArrayList<Question> listExamResult(@RequestBody Exams exam) {
         // creatorId = userId = studentId = WhoCanSee
         ArrayList<QuestionsDTO> questions = questionRepositoryImpl.
                 getUserAnswers(exam.getCreatorId(),exam.getExamId());
@@ -220,23 +220,43 @@ public class QuestionsController {
         correctAnswerMultiple.setAnswerKeyRepository(answerKeyRepository);
         correctAnswerMultiple.setQuestionRepository(questionRepository2);;
 
-        Chain single = new SingleAnswerChain();
-        Chain multiple = new MultipleAnswerChain();
-        single.setNextChain(multiple);
+//        Chain single = new SingleAnswerChain();
+//        Chain multiple = new MultipleAnswerChain();
+//        single.setNextChain(multiple);
 //
         for (QuestionsDTO q : questions){
             correctAnswerSingle.setQuestionsDTO(q);
             correctAnswerMultiple.setQuestionsDTO(q);
-            correctAnswerSingle.correctingAnswer();
-            single.setCorrectAnswer(correctAnswerSingle);
-            multiple.setCorrectAnswer(correctAnswerMultiple);
+//            single.setCorrectAnswer(correctAnswerSingle);
+//            multiple.setCorrectAnswer(correctAnswerMultiple);
             q.setWhoCanSee(exam.getCreatorId());
             if (q.getQuestionType() != 2){
-                single.getFinalResult(q);
+                if (q.getQuestionType() == 3){
+                    correctAnswerMultiple.correctingAnswer();
+                }else {
+                    correctAnswerSingle.correctingAnswer();
+                }
+
             }
 
         }
-        return questions;
+
+        List<Questions> questionsExam = questionRepository2.
+                findQuestionsByExamIdForStudents(exam.getExamId(),
+                        exam.getCreatorId());
+
+        QuestionComponent questionGroup = new QuestionGroup();
+
+        for(Questions question: questionsExam){
+            question.setWhoCanSee(exam.getCreatorId());
+            Question q = new Question(question);
+            q.setOptionRepository(optionRepository);
+            q.setAnswerKeyRepository(answerKeyRepository);
+            q.setUserAnswerRepository(userAnswerRepository);
+            questionGroup.add(q);
+        }
+
+        return ((QuestionGroup) questionGroup).getQuestions();
     }
 
 }

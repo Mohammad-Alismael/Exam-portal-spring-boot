@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Configuration
+@Service
 public abstract class CorrectAnswer {
     protected QuestionsDTO questionsDTO;
     @Autowired

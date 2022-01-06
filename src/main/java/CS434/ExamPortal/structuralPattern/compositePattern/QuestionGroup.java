@@ -2,6 +2,7 @@ package CS434.ExamPortal.structuralPattern.compositePattern;
 
 import CS434.ExamPortal.DAO.AnswerKey;
 import CS434.ExamPortal.DAO.QuestionOptions;
+import CS434.ExamPortal.DAO.UserAnswer;
 import CS434.ExamPortal.DTO.QuestionsDTO;
 
 import java.util.ArrayList;
@@ -35,6 +36,11 @@ public class QuestionGroup implements QuestionComponent{
 
     @Override
     public List<AnswerKey> getAnswerKeys() {
+        return null;
+    }
+
+    @Override
+    public List<UserAnswer> getUserAnswer() {
         return null;
     }
 }
